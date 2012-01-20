@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/newAddressEditText"
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="93dp"
+        android:hint="@string/roppongi_hills"
+        android:inputType="textPersonName"
+        android:textSize="14dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/newAddressSubmitButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/newAddressEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:enabled="false"
+        android:text="@string/submit" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:text="@string/enter_new_address" />
+
+</RelativeLayout>

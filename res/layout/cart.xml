@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/cartRestaurantTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/empty" />
+
+    <TextView
+        android:id="@+id/cartTotalPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/cartRestaurantTextView"
+        android:text="@string/total_price" />
+
+    <ListView
+        android:id="@+id/cartListView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cartCheckoutButton"
+        android:layout_below="@+id/cartTotalPriceTextView"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp" >
+    </ListView>
+
+    <Button
+        android:id="@+id/cartCheckoutButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="66dp"
+        android:text="@string/checkout" />
+
+</RelativeLayout>

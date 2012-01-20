@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@android:style/Theme"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <Button
+        android:id="@+id/restaurantButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/see_menu" />
+
+    <TextView
+        android:id="@+id/restaurantPhoneNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/empty" />
+
+    <TextView
+        android:id="@+id/restaurantAddressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/restaurantMinimumOrderTextView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/empty" />
+
+    <TextView
+        android:id="@+id/restaurantDeliveryTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/delivery_time" />
+
+    <TextView
+        android:id="@+id/restaurantMinimumOrderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/restaurantDeliveryTimeTextView"
+        android:text="@string/minimum_order" />
+
+    <TextView
+        android:id="@+id/restaurantCuisinesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/restaurantAddressTextView"
+        android:text="@string/cuisines" />
+
+</RelativeLayout>

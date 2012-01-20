@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.maishoku.android"
+    android:versionCode="2"
+    android:versionName="1.1" >
+    
+    <uses-sdk android:minSdkVersion="7" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    
+    <application
+        android:theme="@style/main"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.LoginActivity"></activity>
+        <activity android:name=".activities.LocationActivity"></activity>
+        <activity android:name=".activities.NewAddressActivity"></activity>
+        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity android:name=".activities.RestaurantListActivity"></activity>
+        <activity android:name=".activities.RestaurantActivity"></activity>
+        <activity android:name=".activities.ItemListActivity"></activity>
+        <activity android:name=".activities.ItemActivity"></activity>
+        <activity android:name=".activities.CartActivity"></activity>
+        <activity android:name=".activities.CheckoutActivity"></activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RadioGroup
+        android:id="@+id/checkoutRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/checkoutCashRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/cash" />
+
+        <RadioButton
+            android:id="@+id/checkoutCardRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/credit_card" />
+    </RadioGroup>
+
+    <ListView
+        android:id="@+id/checkoutListView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/checkoutButton"
+        android:layout_below="@+id/checkoutRadioGroup"
+        android:visibility="invisible"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp" >
+    </ListView>
+
+    <EditText
+        android:id="@+id/checkoutCardNumberEditText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkoutRadioGroup"
+        android:visibility="invisible"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:hint="@string/credit_card_number"
+        android:inputType="phone"
+        android:singleLine="true"
+        android:textSize="14dp" />
+
+    <EditText
+        android:id="@+id/checkoutExpirationDateEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkoutCardNumberEditText"
+        android:visibility="invisible"
+        android:layout_alignRight="@+id/checkoutButton"
+        android:layout_marginTop="15dp"
+        android:hint="@string/sep13"
+        android:inputType="phone"
+        android:singleLine="true"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/checkoutExpirationDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/checkoutExpirationDateEditText"
+        android:layout_alignLeft="@+id/checkoutButton"
+        android:layout_alignTop="@+id/checkoutExpirationDateEditText"
+        android:layout_below="@+id/checkoutCardNumberEditText"
+        android:gravity="center_vertical"
+        android:text="@string/expiration_date"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/checkoutButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_above="@+id/checkoutTextView"
+        android:layout_marginBottom="15dp"
+        android:text="@string/confirm_order" />
+
+    <TextView
+        android:id="@+id/checkoutTextView"
+        android:gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="60dp"
+        android:text="@string/empty" />
+
+    <ToggleButton
+        android:id="@+id/checkoutToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/checkoutButton"
+        android:layout_alignLeft="@+id/checkoutButton"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/checkoutExpirationDateEditText"
+        android:visibility="invisible"
+        android:textOn="@string/save_card"
+        android:textOff="@string/save_card"
+        android:checked="true" />
+
+</RelativeLayout>
