@@ -29,9 +29,12 @@ import com.maishoku.android.models.CreditCard;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -43,6 +46,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
@@ -102,7 +106,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 								expirationDateEditText.setVisibility(View.INVISIBLE);
 								textView.setVisibility(View.INVISIBLE);
 								toggleButton.setVisibility(View.INVISIBLE);
-								button.setEnabled(true);
+								button.setEnabled(false);
 								break;
 							case 1: // new card
 								listView.setVisibility(View.INVISIBLE);
@@ -131,10 +135,49 @@ public class CheckoutActivity extends RedTitleBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				selectedCreditCard = adapter.getItem(position);
-				view.setSelected(true);
+				button.setEnabled(true);
+				for (int i = 0, n = listView.getChildCount(); i < n; i++) {
+					View childView = listView.getChildAt(i);
+					if (childView == view) {
+						childView.setBackgroundColor(Color.WHITE);
+					} else {
+						childView.setBackgroundColor(Color.TRANSPARENT);
+					}
+				}
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				selectedCreditCard = adapter.getItem(position);
+				return false;
 			}
 		});
 		registerForContextMenu(listView);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		menu.add(R.string.delete);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+		CreditCard creditCard = adapter.getItem(info.position);
+		try {
+			// The selected context item is always 'delete'
+			URI url = API.getURL("/credit_cards/" + creditCard.getId());
+			HttpEntity<Void> httpEntity = API.getHttpEntity(this);
+			RestTemplate restTemplate = new RestTemplate();
+			restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, null);
+			// Should 'always' succeed, so don't care about the response - just remove here
+			adapter.remove(selectedCreditCard);
+			return true;
+		} catch (Exception e) {
+			Log.e(TAG, "Could not delete credit card", e);
+			return false;
+		}
 	}
 	
 	private void setViewsInvisible() {

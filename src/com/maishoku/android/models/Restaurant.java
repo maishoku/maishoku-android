@@ -11,6 +11,7 @@ public class Restaurant {
 	private String name_japanese;
 	private String name_english;
 	private String phone_contact;
+	private String phone_order;
 	private String address;
 	private String commaSeparatedCuisines;
 	private String[] hours;
@@ -66,6 +67,14 @@ public class Restaurant {
 	
 	public void setPhone_contact(String phone_contact) {
 		this.phone_contact = phone_contact;
+	}
+	
+	public String getPhone_order() {
+		return phone_order;
+	}
+	
+	public void setPhone_order(String phone_order) {
+		this.phone_order = phone_order;
 	}
 	
 	public String getAddress() {
