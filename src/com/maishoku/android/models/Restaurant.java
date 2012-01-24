@@ -1,8 +1,11 @@
 package com.maishoku.android.models;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import com.maishoku.android.API;
 import com.maishoku.android.API.Language;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Restaurant {
 
 	private int id;

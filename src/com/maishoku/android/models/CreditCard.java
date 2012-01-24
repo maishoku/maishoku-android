@@ -1,5 +1,8 @@
 package com.maishoku.android.models;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class CreditCard {
 
 	private int id;

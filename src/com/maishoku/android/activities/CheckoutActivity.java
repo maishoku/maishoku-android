@@ -64,8 +64,6 @@ public class CheckoutActivity extends RedTitleBarActivity {
 		setContentView(R.layout.checkout);
 		setTitle(R.string.checkout);
 		final Button button = (Button) findViewById(R.id.checkoutButton);
-		final RadioButton cashRadioButton = (RadioButton) findViewById(R.id.checkoutCashRadioButton);
-		final RadioButton cardRadioButton = (RadioButton) findViewById(R.id.checkoutCardRadioButton);
 		final EditText cardNumberEditText = (EditText) findViewById(R.id.checkoutCardNumberEditText);
 		final EditText expirationDateEditText = (EditText) findViewById(R.id.checkoutExpirationDateEditText);
 		final ListView listView = (ListView) findViewById(R.id.checkoutListView);
@@ -75,12 +73,6 @@ public class CheckoutActivity extends RedTitleBarActivity {
 			@Override
 			public void onClick(View v) {
 				button.setEnabled(false);
-				cashRadioButton.setEnabled(false);
-				cardRadioButton.setEnabled(false);
-				cardNumberEditText.setEnabled(false);
-				expirationDateEditText.setEnabled(false);
-				listView.setEnabled(false);
-				toggleButton.setEnabled(false);
 				new OrderTask().execute();
 			}
 		});
@@ -261,12 +253,14 @@ public class CheckoutActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<String> result) {
-			Cart.clear();
-			setViewsInvisible();
 			if (result.success) {
+				Cart.clear();
+				setViewsInvisible();
 				TextView textView = (TextView) findViewById(R.id.checkoutTextView);
 				textView.setText(getResources().getString(R.string.order_confirmed) + API.restaurant.getDelivery_time().toString());
 			} else {
+				Button button = (Button) findViewById(R.id.checkoutButton);
+				button.setEnabled(true);
 				new AlertDialog.Builder(CheckoutActivity.this)
 					.setTitle(R.string.order_failed)
 					.setMessage(result.message)
