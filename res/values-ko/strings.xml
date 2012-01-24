@@ -74,5 +74,6 @@
     <string name="price">가격: ¥</string>
     <string name="one">1</string>
     <string name="sep13">0913</string>
+    <string name="amount_remaining">¥%d은 부족합니다</string>
 
 </resources>

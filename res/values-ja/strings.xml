@@ -74,5 +74,6 @@
     <string name="price">価格: ¥</string>
     <string name="one">1</string>
     <string name="sep13">0913</string>
+    <string name="amount_remaining">あと%d円足りません</string>
 
 </resources>

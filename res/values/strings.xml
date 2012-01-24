@@ -74,5 +74,6 @@
     <string name="price">Price: ¥</string>
     <string name="one">1</string>
     <string name="sep13">0913</string>
+    <string name="amount_remaining">¥%d under this restaurant\'s minimum order amount.</string>
 
 </resources>

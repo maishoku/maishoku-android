@@ -47,14 +47,27 @@ public class CartActivity extends RedTitleBarActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		TextView textView = (TextView) findViewById(R.id.cartTotalPriceTextView);
-		textView.setText(getResources().getString(R.string.total_price) + Cart.totalPrice());
-		Button button = (Button) findViewById(R.id.cartCheckoutButton);
-		button.setEnabled(Cart.totalPrice() > 0);
+		reloadCart();
 		adapter.clear();
 		for (Position position: Cart.allPositions()) {
 			adapter.add(position);
 		}
+	}
+	
+	private void reloadCart() {
+		int totalPrice = Cart.totalPrice();
+		int amountRemaining = API.restaurant.getMinimum_order() - totalPrice;
+		TextView textView = (TextView) findViewById(R.id.cartAmountRemainingTextView);
+		Button button = (Button) findViewById(R.id.cartCheckoutButton);
+		if (amountRemaining > 0) {
+			textView.setText(String.format(getResources().getString(R.string.amount_remaining), amountRemaining));
+			button.setEnabled(false);
+		} else {
+			textView.setText(null);
+			button.setEnabled(true);
+		}
+		textView = (TextView) findViewById(R.id.cartTotalPriceTextView);
+		textView.setText(getResources().getString(R.string.total_price) + totalPrice);
 	}
 	
 	@Override
@@ -68,10 +81,7 @@ public class CartActivity extends RedTitleBarActivity {
 		Position position = adapter.getItem(info.position);
 		Cart.removeFromCart(position);
 		adapter.remove(position);
-		Button button = (Button) findViewById(R.id.cartCheckoutButton);
-		button.setEnabled(Cart.totalPrice() > 0);
-		TextView textView = (TextView) findViewById(R.id.cartTotalPriceTextView);
-		textView.setText(getResources().getString(R.string.total_price) + Cart.totalPrice());
+		reloadCart();
 		return true;
 	}
 

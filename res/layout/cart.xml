@@ -27,13 +27,23 @@
         android:id="@+id/cartListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/cartCheckoutButton"
+        android:layout_above="@+id/cartAmountRemainingTextView"
         android:layout_below="@+id/cartTotalPriceTextView"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp" >
     </ListView>
+
+    <TextView
+        android:id="@+id/cartAmountRemainingTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:layout_above="@+id/cartCheckoutButton" />
 
     <Button
         android:id="@+id/cartCheckoutButton"
@@ -43,7 +53,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="66dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/checkout" />
 
 </RelativeLayout>
