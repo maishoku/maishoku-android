@@ -55,16 +55,4 @@
         android:layout_marginTop="10dp"
         android:text="@string/quantity_in_cart" />
 
-    <Button
-        android:id="@+id/itemCheckoutButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/itemCurrentlyInCartTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="76dp"
-        android:enabled="false"
-        android:text="@string/checkout" />
-
 </RelativeLayout>

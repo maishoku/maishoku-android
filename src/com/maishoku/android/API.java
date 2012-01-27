@@ -10,14 +10,22 @@ import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 
+import com.maishoku.android.activities.CartActivity;
 import com.maishoku.android.models.Address;
 import com.maishoku.android.models.Item;
 import com.maishoku.android.models.Restaurant;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 public class API {
 
@@ -60,6 +68,24 @@ public class API {
 		} else {
 			return Language.en;
 		}
+	}
+	
+	public static void addCartButton(final Activity activity) {
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		layoutParams.rightMargin = 5;
+		ImageButton imageButton = new ImageButton(activity);
+		imageButton.setBackgroundColor(Color.TRANSPARENT);
+		imageButton.setImageResource(R.drawable.cart);
+		imageButton.setLayoutParams(layoutParams);
+		imageButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				activity.startActivity(new Intent(activity, CartActivity.class));
+			}
+		});
+		RelativeLayout relativeLayout = (RelativeLayout) activity.findViewById(R.id.titleBarRelativeLayout);
+		relativeLayout.addView(imageButton);
 	}
 	
 	public static URI getURL(String resource) throws URISyntaxException {

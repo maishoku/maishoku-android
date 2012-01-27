@@ -60,6 +60,7 @@ public class LocationActivity extends RedTitleBarActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.location);
+		setCustomTitle(R.string.app_name);
 		Button button = (Button) findViewById(R.id.locationLogoutButton);
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -22,6 +22,7 @@ public class RestaurantActivity extends RedTitleBarActivity {
 		super.onCreate(savedInstanceState, R.layout.restaurant);
 		Restaurant restaurant = API.restaurant;
 		setCustomTitle(restaurant.getName());
+		API.addCartButton(this);
 		TextView textView = (TextView) findViewById(R.id.restaurantAddressTextView);
 		textView.setText(restaurant.getAddress());
 		textView = (TextView) findViewById(R.id.restaurantCuisinesTextView);

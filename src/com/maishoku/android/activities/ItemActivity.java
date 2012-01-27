@@ -7,7 +7,6 @@ import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Item;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,13 +25,13 @@ public class ItemActivity extends RedTitleBarActivity {
 		super.onCreate(savedInstanceState, R.layout.item);
 		final Item item = API.item;
 		setCustomTitle(item.getName());
+		API.addCartButton(this);
 		TextView textView = (TextView) findViewById(R.id.itemPriceTextView);
 		textView.append(String.valueOf(item.getPrice()));
 		textView = (TextView) findViewById(R.id.itemCategoryTextView);
 		textView.append(item.getName());
 		final EditText editText = (EditText) findViewById(R.id.itemEditText);
 		final TextView currentlyInCartTextView = (TextView) findViewById(R.id.itemCurrentlyInCartTextView);
-		final Button checkoutButton = (Button) findViewById(R.id.itemCheckoutButton);
 		Button button = (Button) findViewById(R.id.itemAddToCartButton);
 		button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -45,16 +44,9 @@ public class ItemActivity extends RedTitleBarActivity {
 				}
 				String text = ItemActivity.this.getResources().getString(R.string.quantity_in_cart);
 				currentlyInCartTextView.setText(text + Cart.quantityForItem(item));
-				checkoutButton.setEnabled(Cart.totalPrice() > 0);
 				// Hide keyboard
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-			}
-		});
-		checkoutButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(ItemActivity.this, CartActivity.class));
 			}
 		});
 	}
@@ -65,8 +57,6 @@ public class ItemActivity extends RedTitleBarActivity {
 		String text = getResources().getString(R.string.quantity_in_cart);
 		TextView currentlyInCartTextView = (TextView) findViewById(R.id.itemCurrentlyInCartTextView);
 		currentlyInCartTextView.setText(text + Cart.quantityForItem(API.item));
-		Button checkoutButton = (Button) findViewById(R.id.itemCheckoutButton);
-		checkoutButton.setEnabled(Cart.totalPrice() > 0);
 	}
 
 }

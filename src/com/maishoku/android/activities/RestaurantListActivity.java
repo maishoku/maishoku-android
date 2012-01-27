@@ -23,14 +23,19 @@ import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Restaurant;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.RelativeLayout;
 
 public class RestaurantListActivity extends RedTitleBarListActivity {
 
@@ -45,6 +50,21 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		super.onCreate(savedInstanceState);
 		setCustomTitle(R.string.restaurants);
 		adapter = new ArrayAdapter<Restaurant>(this, R.layout.list_item);
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		layoutParams.rightMargin = 5;
+		ImageButton imageButton = new ImageButton(this);
+		imageButton.setBackgroundColor(Color.TRANSPARENT);
+		imageButton.setImageResource(R.drawable.refresh);
+		imageButton.setLayoutParams(layoutParams);
+		imageButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new LoadRestaurantsTask().execute();
+			}
+		});
+		RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.titleBarRelativeLayout);
+		relativeLayout.addView(imageButton);
 		ListView listView = getListView();
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -113,6 +133,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		protected void onPostExecute(Result<Restaurant[]> result) {
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded restaurants");
+				adapter.clear();
 				for (Restaurant restaurant: result.resource) {
 					adapter.add(restaurant);
 				}

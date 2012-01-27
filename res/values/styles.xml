@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="title_background">
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">#C70000</item>
         <item name="android:paddingLeft">5dp</item>
     </style>
