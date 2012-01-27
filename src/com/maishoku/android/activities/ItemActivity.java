@@ -23,10 +23,9 @@ public class ItemActivity extends RedTitleBarActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.item);
+		super.onCreate(savedInstanceState, R.layout.item);
 		final Item item = API.item;
-		setTitle(item.getName());
+		setCustomTitle(item.getName());
 		TextView textView = (TextView) findViewById(R.id.itemPriceTextView);
 		textView.append(String.valueOf(item.getPrice()));
 		textView = (TextView) findViewById(R.id.itemCategoryTextView);

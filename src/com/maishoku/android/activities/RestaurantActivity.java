@@ -19,10 +19,9 @@ public class RestaurantActivity extends RedTitleBarActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.restaurant);
+		super.onCreate(savedInstanceState, R.layout.restaurant);
 		Restaurant restaurant = API.restaurant;
-		setTitle(restaurant.getName());
+		setCustomTitle(restaurant.getName());
 		TextView textView = (TextView) findViewById(R.id.restaurantAddressTextView);
 		textView.setText(restaurant.getAddress());
 		textView = (TextView) findViewById(R.id.restaurantCuisinesTextView);

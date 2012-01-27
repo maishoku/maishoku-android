@@ -43,7 +43,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(R.string.restaurants);
+		setCustomTitle(R.string.restaurants);
 		adapter = new ArrayAdapter<Restaurant>(this, R.layout.list_item);
 		ListView listView = getListView();
 		listView.setAdapter(adapter);

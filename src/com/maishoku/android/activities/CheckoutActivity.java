@@ -60,9 +60,8 @@ public class CheckoutActivity extends RedTitleBarActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.checkout);
-		setTitle(R.string.checkout);
+		super.onCreate(savedInstanceState, R.layout.checkout);
+		setCustomTitle(R.string.checkout);
 		final Button button = (Button) findViewById(R.id.checkoutButton);
 		final EditText cardNumberEditText = (EditText) findViewById(R.id.checkoutCardNumberEditText);
 		final EditText expirationDateEditText = (EditText) findViewById(R.id.checkoutExpirationDateEditText);

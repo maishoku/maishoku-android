@@ -3,10 +3,10 @@ package com.maishoku.android.activities;
 import com.maishoku.android.API;
 import com.maishoku.android.AuthenticateTask;
 import com.maishoku.android.R;
+import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.Result;
 import com.maishoku.android.models.User;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginActivity extends Activity implements AuthenticateTask.Context {
+public class LoginActivity extends RedTitleBarActivity implements AuthenticateTask.Context {
 
 	protected static final String TAG = LoginActivity.class.getSimpleName();
 	
@@ -46,9 +46,8 @@ public class LoginActivity extends Activity implements AuthenticateTask.Context 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
-		setTitle(R.string.login);
+		super.onCreate(savedInstanceState, R.layout.login);
+		setCustomTitle(R.string.login);
 		final Button submitButton = (Button) findViewById(R.id.loginSubmitButton);
 		final EditText usernameEditText = (EditText) findViewById(R.id.loginUsernameEditText);
 		final EditText passwordEditText = (EditText) findViewById(R.id.loginPasswordEditText);

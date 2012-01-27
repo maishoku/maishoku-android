@@ -44,7 +44,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(API.restaurant.getName());
+		setCustomTitle(API.restaurant.getName());
 		adapter = new ArrayAdapter<Item>(this, R.layout.list_item) {
 			@Override
 			public boolean isEnabled(int position) {

@@ -21,10 +21,10 @@ import org.springframework.web.client.RestTemplate;
 import com.maishoku.android.API;
 import com.maishoku.android.IO;
 import com.maishoku.android.R;
+import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.Result;
 import com.maishoku.android.models.User;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,7 +37,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class SignUpActivity extends Activity {
+public class SignUpActivity extends RedTitleBarActivity {
 
 	protected static final String TAG = SignUpActivity.class.getSimpleName();
 	
@@ -53,9 +53,8 @@ public class SignUpActivity extends Activity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.signup);
-		setTitle(R.string.sign_up);
+		super.onCreate(savedInstanceState, R.layout.signup);
+		setCustomTitle(R.string.sign_up);
 		final EditText usernameEditText = (EditText) findViewById(R.id.signupUsernameEditText);
 		final EditText passwordEditText1 = (EditText) findViewById(R.id.signupPasswordEditText1);
 		final EditText passwordEditText2 = (EditText) findViewById(R.id.signupPasswordEditText2);

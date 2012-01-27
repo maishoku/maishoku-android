@@ -37,9 +37,8 @@ public class NewAddressActivity extends RedTitleBarActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.new_address);
-		setTitle(R.string.add_new_address);
+		super.onCreate(savedInstanceState, R.layout.new_address);
+		setCustomTitle(R.string.add_new_address);
 		final EditText newAddressEditText = (EditText) findViewById(R.id.newAddressEditText);
 		final Button submitButton = (Button) findViewById(R.id.newAddressSubmitButton);
 		newAddressEditText.addTextChangedListener(new TextWatcher() {

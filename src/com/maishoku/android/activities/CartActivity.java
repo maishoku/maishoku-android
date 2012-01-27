@@ -26,9 +26,8 @@ public class CartActivity extends RedTitleBarActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.cart);
-		setTitle(R.string.cart);
+		super.onCreate(savedInstanceState, R.layout.cart);
+		setCustomTitle(R.string.cart);
 		Button button = (Button) findViewById(R.id.cartCheckoutButton);
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
