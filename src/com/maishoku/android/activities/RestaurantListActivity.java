@@ -22,6 +22,7 @@ import com.maishoku.android.models.Address;
 import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Restaurant;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -43,6 +44,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	
 	private final AtomicBoolean restaurantsLoaded = new AtomicBoolean(false);
 	private ArrayAdapter<Restaurant> adapter;
+	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -60,6 +62,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		imageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				progressDialog.show();
 				new LoadRestaurantsTask().execute();
 			}
 		});
@@ -84,6 +87,8 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	protected void onStart() {
 		super.onStart();
 		if (!restaurantsLoaded.get()) {
+			progressDialog = new ProgressDialog(RestaurantListActivity.this);
+			progressDialog.show();
 			new LoadRestaurantsTask().execute();
 		}
 	}
@@ -131,6 +136,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		
 		@Override
 		protected void onPostExecute(Result<Restaurant[]> result) {
+			progressDialog.dismiss();
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded restaurants");
 				adapter.clear();

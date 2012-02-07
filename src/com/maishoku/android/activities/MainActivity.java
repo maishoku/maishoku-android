@@ -6,6 +6,7 @@ import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.Result;
 import com.maishoku.android.models.User;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.util.Log;
 public class MainActivity extends RedTitleBarActivity implements AuthenticateTask.Context {
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
+	private ProgressDialog progressDialog;
 	
 	@Override
 	public void onStart() {
@@ -27,12 +29,15 @@ public class MainActivity extends RedTitleBarActivity implements AuthenticateTas
 			finish();
 		} else {
 			Log.i(TAG, "username and password stored - executing AuthenticateTask");
+			progressDialog = new ProgressDialog(this);
+			progressDialog.show();
 			new AuthenticateTask(this, username, password).execute();
 		}
 	}
 	
 	@Override
 	public void onPostExecute(Result<User> result) {
+		progressDialog.dismiss();
 		if (result.success) {
 			startActivity(new Intent(this, LocationActivity.class));
 		} else {

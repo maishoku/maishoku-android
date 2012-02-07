@@ -21,6 +21,7 @@ import com.maishoku.android.Result;
 import com.maishoku.android.models.Category;
 import com.maishoku.android.models.Item;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	
 	private final AtomicBoolean itemsLoaded = new AtomicBoolean(false);
 	private ArrayAdapter<Item> adapter;
+	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -77,6 +79,8 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	protected void onStart() {
 		super.onStart();
 		if (!itemsLoaded.get()) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.show();
 			new LoadCategoriesTask().execute();
 		}
 	}
@@ -121,6 +125,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		
 		@Override
 		protected void onPostExecute(Result<Category[]> result) {
+			progressDialog.dismiss();
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded categories");
 				for (Category category: result.resource) {

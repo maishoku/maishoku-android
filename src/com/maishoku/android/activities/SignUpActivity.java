@@ -26,6 +26,7 @@ import com.maishoku.android.Result;
 import com.maishoku.android.models.User;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -40,6 +41,7 @@ import android.widget.EditText;
 public class SignUpActivity extends RedTitleBarActivity {
 
 	protected static final String TAG = SignUpActivity.class.getSimpleName();
+	private ProgressDialog progressDialog;
 	
 	private static final Pattern emailPattern = Pattern.compile(
 		"(?:[a-z0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[a-z0-9!#$%\\&'*+/=?\\^_`{|}" +
@@ -93,35 +95,11 @@ public class SignUpActivity extends RedTitleBarActivity {
 						.show();
 					return;
 				}
+				progressDialog = new ProgressDialog(SignUpActivity.this);
+				progressDialog.show();
 				new SignUpTask(username, password1, email, phoneNumber).execute();
 			}
 		});
-	}
-	
-	protected void onPostExecute(Result<User> result) {
-		if (result.success) {
-			Log.i(TAG, "Successfully created new user");
-			Editor editor = getSharedPreferences(API.PREFS, Context.MODE_PRIVATE).edit();
-			editor.putString("username", result.resource.getUsername());
-			editor.putString("password", result.resource.getPassword());
-			editor.commit();
-			new AlertDialog.Builder(this)
-				.setTitle(R.string.sign_up_complete)
-				.setMessage(R.string.check_your_email)
-				.setPositiveButton(R.string.ok, new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						SignUpActivity.this.finish();
-					}
-				}).show();
-		} else {
-			Log.i(TAG, "Failed to create new user");
-			new AlertDialog.Builder(this)
-				.setTitle(R.string.please_try_again)
-				.setMessage(result.message)
-				.setPositiveButton(R.string.ok, null)
-				.show();
-		}
 	}
 	
 	private class SignUpTask extends AsyncTask<Void, Void, Result<User>> {
@@ -177,7 +155,30 @@ public class SignUpActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<User> result) {
-			SignUpActivity.this.onPostExecute(result);
+			progressDialog.dismiss();
+			if (result.success) {
+				Log.i(TAG, "Successfully created new user");
+				Editor editor = getSharedPreferences(API.PREFS, Context.MODE_PRIVATE).edit();
+				editor.putString("username", result.resource.getUsername());
+				editor.putString("password", result.resource.getPassword());
+				editor.commit();
+				new AlertDialog.Builder(SignUpActivity.this)
+					.setTitle(R.string.sign_up_complete)
+					.setMessage(R.string.check_your_email)
+					.setPositiveButton(R.string.ok, new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							SignUpActivity.this.finish();
+						}
+					}).show();
+			} else {
+				Log.i(TAG, "Failed to create new user");
+				new AlertDialog.Builder(SignUpActivity.this)
+					.setTitle(R.string.please_try_again)
+					.setMessage(result.message)
+					.setPositiveButton(R.string.ok, null)
+					.show();
+			}
 		}
 	
 	}

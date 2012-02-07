@@ -8,6 +8,7 @@ import com.maishoku.android.Result;
 import com.maishoku.android.models.User;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -22,9 +23,11 @@ import android.widget.EditText;
 public class LoginActivity extends RedTitleBarActivity implements AuthenticateTask.Context {
 
 	protected static final String TAG = LoginActivity.class.getSimpleName();
+	private ProgressDialog progressDialog;
 	
 	@Override
 	public void onPostExecute(Result<User> result) {
+		progressDialog.dismiss();
 		if (result.success) {
 			Log.i(TAG, "Successfully authenticated");
 			Editor editor = getSharedPreferences(API.PREFS, Context.MODE_PRIVATE).edit();
@@ -68,6 +71,8 @@ public class LoginActivity extends RedTitleBarActivity implements AuthenticateTa
 		submitButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				progressDialog = new ProgressDialog(LoginActivity.this);
+				progressDialog.show();
 				String username = usernameEditText.getText().toString();
 				String password = passwordEditText.getText().toString();
 				new AuthenticateTask(LoginActivity.this, username, password).execute();

@@ -21,6 +21,7 @@ import com.maishoku.android.Result;
 import com.maishoku.android.models.Address;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,6 +34,7 @@ import android.widget.EditText;
 public class NewAddressActivity extends RedTitleBarActivity {
 
 	protected static final String TAG = NewAddressActivity.class.getSimpleName();
+	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -56,6 +58,8 @@ public class NewAddressActivity extends RedTitleBarActivity {
 		submitButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				progressDialog = new ProgressDialog(NewAddressActivity.this);
+				progressDialog.show();
 				String address = newAddressEditText.getText().toString();
 				new NewAddressTask(address).execute();
 			}
@@ -108,6 +112,7 @@ public class NewAddressActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<Address> result) {
+			progressDialog.dismiss();
 			if (result.success) {
 				Log.i(TAG, "Successfully added new address");
 				NewAddressActivity.this.finish();

@@ -28,6 +28,7 @@ import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.CreditCard;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -57,12 +58,14 @@ public class CheckoutActivity extends RedTitleBarActivity {
 	
 	private ArrayAdapter<CreditCard> adapter;
 	private CreditCard selectedCreditCard;
+	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.checkout);
 		setCustomTitle(R.string.checkout);
+		progressDialog = new ProgressDialog(this);
 		final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
 		final Button addInstructionsButton = (Button) findViewById(R.id.checkoutAddInstructionsButton);
 		final EditText cardNumberEditText = (EditText) findViewById(R.id.checkoutCardNumberEditText);
@@ -73,6 +76,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 		checkoutButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				progressDialog.show();
 				checkoutButton.setEnabled(false);
 				addInstructionsButton.setEnabled(false);
 				new OrderTask().execute();
@@ -101,6 +105,8 @@ public class CheckoutActivity extends RedTitleBarActivity {
 							selectedCreditCard = null;
 							switch (item) {
 							case 0: // saved card
+								progressDialog = new ProgressDialog(CheckoutActivity.this);
+								progressDialog.show();
 								new LoadCreditCardsTask().execute();
 								listView.setVisibility(View.VISIBLE);
 								cardNumberEditText.setVisibility(View.INVISIBLE);
@@ -267,6 +273,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<String> result) {
+			progressDialog.dismiss();
 			if (result.success) {
 				Cart.clear();
 				setViewsInvisible();
@@ -329,6 +336,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<CreditCard[]> result) {
+			progressDialog.dismiss();
 			for (CreditCard creditCard: result.resource) {
 				adapter.add(creditCard);
 			}

@@ -23,6 +23,7 @@ import com.maishoku.android.Result;
 import com.maishoku.android.models.Address;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -55,6 +56,7 @@ public class LocationActivity extends RedTitleBarActivity {
 	
 	private Address selectedAddress;
 	private ArrayAdapter<Address> adapter;
+	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -155,6 +157,8 @@ public class LocationActivity extends RedTitleBarActivity {
 	protected void onStart() {
 		super.onStart();
 		adapter.clear();
+		progressDialog = new ProgressDialog(this);
+		progressDialog.show();
 		new LoadAddressesTask().execute();
 	}
 	
@@ -225,6 +229,7 @@ public class LocationActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<Address[]> result) {
+			progressDialog.dismiss();
 			if (result.success) {
 				for (Address address: result.resource) {
 					adapter.add(address);

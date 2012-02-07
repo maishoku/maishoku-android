@@ -27,6 +27,7 @@ import com.maishoku.android.models.Option;
 import com.maishoku.android.models.OptionSet;
 import com.maishoku.android.models.Position;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class ItemActivity extends RedTitleBarActivity {
 
 	protected static final String TAG = ItemActivity.class.getSimpleName();
 	
+	private ProgressDialog progressDialog;
 	private final AtomicBoolean itemLoaded = new AtomicBoolean(false);
 	private ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 	private SimpleAdapter optionSetAdapter;
@@ -166,6 +168,8 @@ public class ItemActivity extends RedTitleBarActivity {
 		super.onStart();
 		reloadCurrentlyInCartTextView();
 		if (!itemLoaded.get()) {
+			progressDialog = new ProgressDialog(this);
+			progressDialog.show();
 			new LoadItemTask().execute();
 		}
 	}
@@ -210,6 +214,7 @@ public class ItemActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<Item> result) {
+			progressDialog.dismiss();
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded item");
 				item = result.resource;
