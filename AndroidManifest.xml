@@ -32,6 +32,7 @@
         <activity android:name=".activities.CartActivity"></activity>
         <activity android:name=".activities.CheckoutActivity"></activity>
         <activity android:name=".activities.ToppingsActivity"></activity>
+        <activity android:name=".activities.AddInstructionsActivity"></activity>
     </application>
 
 </manifest>

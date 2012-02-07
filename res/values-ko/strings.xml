@@ -51,6 +51,7 @@
     <string name="failed_to_add_new_address">잘못된 주소입니다</string>
     <string name="submit">전송</string>
     <string name="cancel">취소</string>
+    <string name="done">완료</string>
     <string name="group_name">그룹 이름</string>
     <string name="awesome_group">짱그룹</string>
     <string name="restaurants">음식점</string>

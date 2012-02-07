@@ -51,6 +51,7 @@
     <string name="failed_to_add_new_address">Failed to add new address</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
     <string name="group_name">Group Name</string>
     <string name="awesome_group">Awesome Group</string>
     <string name="restaurants">Restaurants</string>

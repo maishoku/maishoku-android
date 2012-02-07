@@ -29,6 +29,7 @@ import com.maishoku.android.models.CreditCard;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,24 +63,32 @@ public class CheckoutActivity extends RedTitleBarActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.checkout);
 		setCustomTitle(R.string.checkout);
-		final Button button = (Button) findViewById(R.id.checkoutButton);
+		final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
+		final Button addInstructionsButton = (Button) findViewById(R.id.checkoutAddInstructionsButton);
 		final EditText cardNumberEditText = (EditText) findViewById(R.id.checkoutCardNumberEditText);
 		final EditText expirationDateEditText = (EditText) findViewById(R.id.checkoutExpirationDateEditText);
 		final ListView listView = (ListView) findViewById(R.id.checkoutListView);
 		final TextView textView = (TextView) findViewById(R.id.checkoutExpirationDateTextView);
 		final ToggleButton toggleButton = (ToggleButton) findViewById(R.id.checkoutToggleButton);
-		button.setOnClickListener(new OnClickListener() {
+		checkoutButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				button.setEnabled(false);
+				checkoutButton.setEnabled(false);
+				addInstructionsButton.setEnabled(false);
 				new OrderTask().execute();
+			}
+		});
+		addInstructionsButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(CheckoutActivity.this, AddInstructionsActivity.class));
 			}
 		});
 		RadioGroup radioGroup = (RadioGroup) findViewById(R.id.checkoutRadioGroup);
 		radioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				button.setEnabled(false);
+				checkoutButton.setEnabled(false);
 				RadioButton cardRadioButton = (RadioButton) findViewById(R.id.checkoutCardRadioButton);
 				if (checkedId == cardRadioButton.getId()) { // credit card payment
 					String saved_card = getResources().getString(R.string.saved_card);
@@ -98,7 +107,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 								expirationDateEditText.setVisibility(View.INVISIBLE);
 								textView.setVisibility(View.INVISIBLE);
 								toggleButton.setVisibility(View.INVISIBLE);
-								button.setEnabled(false);
+								checkoutButton.setEnabled(false);
 								break;
 							case 1: // new card
 								listView.setVisibility(View.INVISIBLE);
@@ -106,7 +115,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 								expirationDateEditText.setVisibility(View.VISIBLE);
 								textView.setVisibility(View.VISIBLE);
 								toggleButton.setVisibility(View.VISIBLE);
-								button.setEnabled(true);
+								checkoutButton.setEnabled(true);
 								break;
 							default:
 								setViewsInvisible();
@@ -117,7 +126,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 					builder.create().show();
 				} else { // cash payment
 					setViewsInvisible();
-					button.setEnabled(true);
+					checkoutButton.setEnabled(true);
 				}
 			}
 		});
@@ -127,7 +136,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				selectedCreditCard = adapter.getItem(position);
-				button.setEnabled(true);
+				checkoutButton.setEnabled(true);
 				for (int i = 0, n = listView.getChildCount(); i < n; i++) {
 					View childView = listView.getChildAt(i);
 					if (childView == view) {
@@ -222,6 +231,10 @@ public class CheckoutActivity extends RedTitleBarActivity {
 						map.put("credit_card_id", selectedCreditCard.getId());
 					}
 				}
+				String instructions = Cart.getInstructions();
+				if (instructions != null) {
+					map.put("instructions", instructions);
+				}
 				map.put("payment_method", id);
 				map.put("is_delivery", API.orderMethod == OrderMethod.delivery);
 				map.put("address_id", API.address.getId());
@@ -263,6 +276,8 @@ public class CheckoutActivity extends RedTitleBarActivity {
 				textView.setText(getResources().getString(R.string.order_confirmed) + API.restaurant.getDelivery_time().toString());
 			} else {
 				Button button = (Button) findViewById(R.id.checkoutButton);
+				button.setEnabled(true);
+				button = (Button) findViewById(R.id.checkoutAddInstructionsButton);
 				button.setEnabled(true);
 				new AlertDialog.Builder(CheckoutActivity.this)
 					.setTitle(R.string.order_failed)

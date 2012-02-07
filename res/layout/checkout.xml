@@ -84,19 +84,30 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_above="@+id/checkoutTextView"
-        android:layout_marginBottom="15dp"
+        android:layout_above="@+id/checkoutAddInstructionsButton"
+        android:layout_marginBottom="10dp"
         android:text="@string/confirm_order" />
+
+    <Button
+        android:id="@+id/checkoutAddInstructionsButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_above="@+id/checkoutTextView"
+        android:layout_marginBottom="10dp"
+        android:text="@string/add_instructions" />
 
     <TextView
         android:id="@+id/checkoutTextView"
         android:gravity="center"
+        android:lines="2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="30dp"
         android:text="@string/empty" />
 
     <ToggleButton

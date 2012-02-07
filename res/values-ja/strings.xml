@@ -51,6 +51,7 @@
     <string name="failed_to_add_new_address">エラーが発生しました</string>
     <string name="submit">送信</string>
     <string name="cancel">キャンセル</string>
+    <string name="done">完了</string>
     <string name="group_name">グループ名</string>
     <string name="awesome_group">素晴らしいグループ</string>
     <string name="restaurants">店舗</string>
