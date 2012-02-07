@@ -1,6 +1,5 @@
 package com.maishoku.android.models;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,83 +10,81 @@ import org.json.JSONObject;
 
 public class Cart {
 
-	private static final Map<Integer, Position> cart = new HashMap<Integer, Position>(); // {item.id: position}
+	private static final LinkedList<Position> positions = new LinkedList<Position>();
+	private static String instructions;
 	
-	public static void addToCart(Item item, int quantity) {
-		if (quantity < 1) {
-			throw new IllegalArgumentException("quantity must be greater than zero");
-		}
-		int id = item.getId();
-		Position position = cart.get(id);
-		if (position == null) {
-			position = new Position(item, quantity);
-			cart.put(id, position);
-		} else {
-			position.setQuantity(position.getQuantity() + quantity);
-		}
+	public static void setInstructions(String instructions) {
+		Cart.instructions = instructions;
 	}
 	
-	public static void removeFromCart(Position position) {
-		cart.remove(position.getItem().getId());
+	public static String getInstructions() {
+		return instructions;
 	}
 	
-	public static void removeFromCart(Item item) {
-		cart.remove(item.getId());
+	public static void addPosition(Position position) {
+		positions.add(position);
 	}
 	
-	public static void updateQuantity(Item item, int quantity) {
-		if (quantity < 1) {
-			throw new IllegalArgumentException("quantity must be greater than zero");
-		}
-		int id = item.getId();
-		Position position = cart.get(id);
-		if (position == null) {
-			position = new Position(item, quantity);
-			cart.put(id, position);
-		} else {
-			position.setQuantity(quantity);
-		}
+	public static void removePosition(Position position) {
+		positions.remove(position);
 	}
 	
 	public static void clear() {
-		cart.clear();
+		instructions = null;
+		positions.clear();
 	}
 	
-	public static int quantityForItem(Item item) {
-		Position position = cart.get(item.getId());
-		if (position == null) {
-			return 0;
-		} else {
-			return position.getQuantity();
+	public static List<Position> allPositions() {
+		return positions;
+	}
+	
+	public static int size() {
+		int size = 0;
+		for (Position position: positions) {
+			size += position.getQuantity();
 		}
+		return size;
 	}
 	
 	public static int totalPrice() {
 		int totalPrice = 0;
-		for (Position position: cart.values()) {
-			totalPrice += position.getItem().getPrice() * position.getQuantity();
+		for (Position position: positions) {
+			int quantity = position.getQuantity();
+			totalPrice += position.getItem().getPrice() * quantity;
+			for (Option option: position.getOptions()) {
+				totalPrice += option.getPrice_delta() * quantity;
+			}
+			for (Topping topping: position.getToppings()) {
+				totalPrice += topping.getPrice_fixed() * quantity;
+			}
 		}
 		return totalPrice;
 	}
 	
-	public static Collection<Position> allPositions() {
-		return cart.values();
-	}
-	
-	public static List<Item> allItems() {
-		List<Item> items = new LinkedList<Item>();
-		for (Position position: cart.values()) {
-			items.add(position.getItem());
-		}
-		return items;
-	}
-	
 	public static JSONArray toJSONArray() {
 		JSONArray jsonArray = new JSONArray();
-		for (Position position: cart.values()) {
+		for (Position position: positions) {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("item_id", position.getItem().getId());
 			map.put("quantity", position.getQuantity());
+			if (position.getOptions().size() > 0) {
+				JSONArray options = new JSONArray();
+				for (Option option: position.getOptions()) {
+					Map<String, Object> m = new HashMap<String, Object>();
+					m.put("id", option.getId());
+					options.put(new JSONObject(m));
+				}
+				map.put("options", options);
+			}
+			if (position.getToppings().size() > 0) {
+				JSONArray toppings = new JSONArray();
+				for (Topping topping: position.getToppings()) {
+					Map<String, Object> m = new HashMap<String, Object>();
+					m.put("id", topping.getId());
+					toppings.put(new JSONObject(m));
+				}
+				map.put("toppings", toppings);
+			}
 			JSONObject jsonObject = new JSONObject(map);
 			jsonArray.put(jsonObject);
 		}

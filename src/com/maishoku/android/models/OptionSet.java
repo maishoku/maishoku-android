@@ -4,14 +4,18 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
-public class Cuisine implements Serializable {
+import com.maishoku.android.API;
+import com.maishoku.android.API.Language;
 
-	private static final long serialVersionUID = 4628139235108815084L;
+@JsonIgnoreProperties(ignoreUnknown=true)
+public class OptionSet implements Serializable {
+
+	private static final long serialVersionUID = 3987955988782225585L;
 	
 	private int id;
 	private String name_english;
 	private String name_japanese;
+	private Option[] options;
 	
 	public int getId() {
 		return id;
@@ -35,6 +39,23 @@ public class Cuisine implements Serializable {
 	
 	public void setName_japanese(String name_japanese) {
 		this.name_japanese = name_japanese;
+	}
+	
+	public Option[] getOptions() {
+		return options;
+	}
+	
+	public void setOptions(Option[] options) {
+		this.options = options;
+	}
+	
+	public String getName() {
+		return API.getLanguage() == Language.ja ? name_japanese : name_english;
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
 	}
 
 }

@@ -86,6 +86,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 					String new_card = getResources().getString(R.string.new_card);
 					String[] items = {saved_card, new_card};
 					AlertDialog.Builder builder = new AlertDialog.Builder(CheckoutActivity.this);
+					builder.setTitle(R.string.credit_card);
 					builder.setItems(items, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int item) {
 							selectedCreditCard = null;
@@ -149,6 +150,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		menu.setHeaderTitle(R.string.credit_card);
 		menu.add(R.string.delete);
 	}
 	
@@ -255,6 +257,8 @@ public class CheckoutActivity extends RedTitleBarActivity {
 			if (result.success) {
 				Cart.clear();
 				setViewsInvisible();
+				RadioGroup radioGroup = (RadioGroup) findViewById(R.id.checkoutRadioGroup);
+				radioGroup.setVisibility(View.INVISIBLE);
 				TextView textView = (TextView) findViewById(R.id.checkoutTextView);
 				textView.setText(getResources().getString(R.string.order_confirmed) + API.restaurant.getDelivery_time().toString());
 			} else {

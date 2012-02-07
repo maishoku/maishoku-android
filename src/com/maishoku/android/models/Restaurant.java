@@ -1,13 +1,17 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.maishoku.android.API;
 import com.maishoku.android.API.Language;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Restaurant {
+public class Restaurant implements Serializable {
 
+	private static final long serialVersionUID = -8267366911607387698L;
+	
 	private int id;
 	private int minimum_order;
 	private DeliveryTime delivery_time;

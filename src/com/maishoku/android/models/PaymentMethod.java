@@ -1,10 +1,14 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class PaymentMethod {
+public class PaymentMethod implements Serializable {
 
+	private static final long serialVersionUID = -1166215174270112651L;
+	
 	private int id;
 	private String name;
 	

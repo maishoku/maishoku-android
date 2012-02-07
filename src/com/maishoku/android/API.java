@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import com.maishoku.android.activities.CartActivity;
 import com.maishoku.android.models.Address;
 import com.maishoku.android.models.Item;
+import com.maishoku.android.models.Position;
 import com.maishoku.android.models.Restaurant;
 
 import android.app.Activity;
@@ -36,8 +37,10 @@ public class API {
 	public static final String API_VERSION = "1.0";
 	public static final String PREFS = "PREFS";
 	public static Address address;
-	public static Item item;
 	public static OrderMethod orderMethod = OrderMethod.delivery;
+	public static Item item;
+	public static Item toppingsItem;
+	public static Position toppingsPosition;
 	public static Restaurant restaurant;
 	public static String username;
 	public static String password;

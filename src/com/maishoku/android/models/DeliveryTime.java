@@ -1,13 +1,17 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.maishoku.android.API;
 import com.maishoku.android.API.Language;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class DeliveryTime {
+public class DeliveryTime implements Serializable {
 
+	private static final long serialVersionUID = 3560207699325723198L;
+	
 	private String value_japanese;
 	private String value_english;
 	

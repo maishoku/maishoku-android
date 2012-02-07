@@ -8,14 +8,15 @@ import com.maishoku.android.API;
 import com.maishoku.android.API.Language;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Category implements Serializable {
+public class Option implements Serializable {
 
-	private static final long serialVersionUID = -3791709142838173633L;
+	private static final long serialVersionUID = -8333163851655073049L;
 	
 	private int id;
+	private boolean item_based;
+	private int price_delta;
 	private String name_english;
 	private String name_japanese;
-	private Item[] items;
 	
 	public int getId() {
 		return id;
@@ -25,8 +26,20 @@ public class Category implements Serializable {
 		this.id = id;
 	}
 	
-	public String getName() {
-		return API.getLanguage() == Language.ja ? name_japanese : name_english;
+	public boolean isItem_based() {
+		return item_based;
+	}
+	
+	public void setItem_based(boolean item_based) {
+		this.item_based = item_based;
+	}
+	
+	public int getPrice_delta() {
+		return price_delta;
+	}
+	
+	public void setPrice_delta(int price_delta) {
+		this.price_delta = price_delta;
 	}
 	
 	public String getName_english() {
@@ -45,12 +58,13 @@ public class Category implements Serializable {
 		this.name_japanese = name_japanese;
 	}
 	
-	public Item[] getItems() {
-		return items;
+	public String getName() {
+		return API.getLanguage() == Language.ja ? name_japanese : name_english;
 	}
 	
-	public void setItems(Item[] items) {
-		this.items = items;
+	@Override
+	public String toString() {
+		return String.format("%s (%+d円)", getName(), price_delta);
 	}
 
 }

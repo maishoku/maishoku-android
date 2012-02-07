@@ -54,9 +54,9 @@
     <string name="group_name">Group Name</string>
     <string name="awesome_group">Awesome Group</string>
     <string name="restaurants">Restaurants</string>
-    <string name="delivery_time">Delivery Time:\u0020</string>
-    <string name="minimum_order">Minimum Order: ¥</string>
-    <string name="cuisines">Cuisines:\u0020</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="minimum_order">Minimum Order</string>
+    <string name="cuisines">Cuisines</string>
     <string name="see_menu">See menu for this restaurant</string>
     <string name="passwords_are_not_same">Passwords are not the same</string>
     <string name="phone_number_invalid">Phone number invalid</string>
@@ -75,5 +75,13 @@
     <string name="one">1</string>
     <string name="sep13">0913</string>
     <string name="amount_remaining">¥%d under this restaurant\'s minimum order amount.</string>
+    <string name="address">Address</string>
+    <string name="add_toppings">Add Toppings</string>
+    <string name="no_toppings">No toppings available for this item</string>
+    <string name="no_options">No options available for this item</string>
+    <string name="category">Category</string>
+    <string name="add_instructions">Add Order Instructions</string>
+    <string name="phone_order">Phone Number</string>
+    <string name="quantity">Quantity</string>
 
 </resources>

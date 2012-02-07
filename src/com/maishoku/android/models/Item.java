@@ -1,18 +1,49 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import com.maishoku.android.API;
 import com.maishoku.android.API.Language;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Item {
+public class Item implements Serializable {
 
+	private static final long serialVersionUID = 5816012272682951312L;
+	
+	private int id;
+	private int price;
+	private boolean available;
+	private Category category;
+	private OptionSet[] option_sets;
 	private String name_english;
 	private String name_japanese;
-	private boolean available;
-	private int price;
-	private int id;
+	private Topping[] toppings;
+	
+	public Category getCategory() {
+		return category;
+	}
+	
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
+	public OptionSet[] getOption_sets() {
+		return option_sets;
+	}
+	
+	public void setOption_sets(OptionSet[] option_sets) {
+		this.option_sets = option_sets;
+	}
+	
+	public Topping[] getToppings() {
+		return toppings;
+	}
+	
+	public void setToppings(Topping[] toppings) {
+		this.toppings = toppings;
+	}
 	
 	public String getName() {
 		return API.getLanguage() == Language.ja ? name_japanese : name_english;

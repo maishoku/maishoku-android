@@ -54,9 +54,9 @@
     <string name="group_name">グループ名</string>
     <string name="awesome_group">素晴らしいグループ</string>
     <string name="restaurants">店舗</string>
-    <string name="delivery_time">お届けの時間:\u0020</string>
-    <string name="minimum_order">最低注文金額: ¥</string>
-    <string name="cuisines">ジャンル:\u0020</string>
+    <string name="delivery_time">お届けの時間</string>
+    <string name="minimum_order">最低注文金額</string>
+    <string name="cuisines">ジャンル</string>
     <string name="see_menu">この店のメニューを見る</string>
     <string name="passwords_are_not_same">パスワードが一致していません</string>
     <string name="phone_number_invalid">無効な電話番号</string>
@@ -75,5 +75,13 @@
     <string name="one">1</string>
     <string name="sep13">0913</string>
     <string name="amount_remaining">あと%d円足りません</string>
+    <string name="address">住所</string>
+    <string name="add_toppings">トッピングの追加</string>
+    <string name="no_toppings">この商品はトッピングがありません</string>
+    <string name="no_options">この商品はオプションがありません</string>
+    <string name="category">カテゴリ</string>
+    <string name="add_instructions">店舗への要望を書く</string>
+    <string name="phone_order">電話番号</string>
+    <string name="quantity">商品数</string>
 
 </resources>

@@ -23,36 +23,69 @@
         android:layout_below="@+id/itemPriceTextView"
         android:text="@string/empty" />
 
-    <Button
-        android:id="@+id/itemAddToCartButton"
+    <ListView
+        android:id="@+id/itemListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/itemAddToppingsButton"
+        android:layout_below="@+id/itemCategoryTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/itemAddToppingsButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_above="@+id/itemQuantityTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="@string/add_toppings" />
+
+    <TextView
+        android:id="@+id/itemQuantityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/itemSeekBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp" />
+
+    <SeekBar
+        android:id="@+id/itemSeekBar"
+        android:max="10"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/itemAddToCartButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:id="@+id/itemAddToCartButton"
+        android:enabled="false"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/itemCurrentlyInCartTextView"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:text="@string/add_to_cart" />
 
-    <EditText
-        android:id="@+id/itemEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/itemAddToCartButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:inputType="number"
-        android:text="@string/one" >
-
-        <requestFocus />
-    </EditText>
-
     <TextView
         android:id="@+id/itemCurrentlyInCartTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/itemAddToCartButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
         android:text="@string/quantity_in_cart" />
 
 </RelativeLayout>

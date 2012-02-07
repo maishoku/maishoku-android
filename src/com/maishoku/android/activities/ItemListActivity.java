@@ -130,6 +130,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 					i.setAvailable(false);
 					adapter.add(i);
 					for (Item item: category.getItems()) {
+						item.setCategory(category);
 						adapter.add(item);
 					}
 				}

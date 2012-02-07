@@ -160,6 +160,7 @@ public class LocationActivity extends RedTitleBarActivity {
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		menu.setHeaderTitle(R.string.address);
 		menu.add(R.string.delete);
 	}
 	

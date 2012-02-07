@@ -1,10 +1,14 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Address {
+public class Address implements Serializable {
 
+	private static final long serialVersionUID = 1366683769358658907L;
+	
 	private Integer id;
 	private Integer frequency;
 	private Double lat;

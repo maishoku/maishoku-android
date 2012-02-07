@@ -1,10 +1,14 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class User {
+public class User implements Serializable {
 
+	private static final long serialVersionUID = 928510435677681457L;
+	
 	private String username;
 	private String password;
 	

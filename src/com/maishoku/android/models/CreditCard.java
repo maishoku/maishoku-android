@@ -1,10 +1,14 @@
 package com.maishoku.android.models;
 
+import java.io.Serializable;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class CreditCard {
+public class CreditCard implements Serializable {
 
+	private static final long serialVersionUID = -6301781072616586584L;
+	
 	private int id;
 	private String card_number;
 	private String expiration_date;

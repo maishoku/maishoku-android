@@ -71,6 +71,7 @@ public class CartActivity extends RedTitleBarActivity {
 	
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+		menu.setHeaderTitle(R.string.cart);
 		menu.add(R.string.delete);
 	}
 	
@@ -78,7 +79,7 @@ public class CartActivity extends RedTitleBarActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		Position position = adapter.getItem(info.position);
-		Cart.removeFromCart(position);
+		Cart.removePosition(position);
 		adapter.remove(position);
 		reloadCart();
 		return true;
