@@ -84,5 +84,6 @@
     <string name="add_instructions">Add Order Instructions</string>
     <string name="phone_order">Phone Number</string>
     <string name="quantity">Quantity</string>
+    <string name="loading">Loading&#8230;</string>
 
 </resources>

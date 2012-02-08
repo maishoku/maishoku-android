@@ -72,6 +72,7 @@ public class LoginActivity extends RedTitleBarActivity implements AuthenticateTa
 			@Override
 			public void onClick(View v) {
 				progressDialog = new ProgressDialog(LoginActivity.this);
+				progressDialog.setTitle(R.string.loading);
 				progressDialog.show();
 				String username = usernameEditText.getText().toString();
 				String password = passwordEditText.getText().toString();

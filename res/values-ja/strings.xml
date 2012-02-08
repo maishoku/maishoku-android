@@ -84,5 +84,6 @@
     <string name="add_instructions">店舗への要望を書く</string>
     <string name="phone_order">電話番号</string>
     <string name="quantity">商品数</string>
+    <string name="loading">読み込み中&#8230;</string>
 
 </resources>

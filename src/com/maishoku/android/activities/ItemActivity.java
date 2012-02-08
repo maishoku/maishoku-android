@@ -169,6 +169,7 @@ public class ItemActivity extends RedTitleBarActivity {
 		reloadCurrentlyInCartTextView();
 		if (!itemLoaded.get()) {
 			progressDialog = new ProgressDialog(this);
+			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
 			new LoadItemTask().execute();
 		}

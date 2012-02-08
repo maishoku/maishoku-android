@@ -2,6 +2,7 @@ package com.maishoku.android.activities;
 
 import com.maishoku.android.API;
 import com.maishoku.android.AuthenticateTask;
+import com.maishoku.android.R;
 import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.Result;
 import com.maishoku.android.models.User;
@@ -30,6 +31,7 @@ public class MainActivity extends RedTitleBarActivity implements AuthenticateTas
 		} else {
 			Log.i(TAG, "username and password stored - executing AuthenticateTask");
 			progressDialog = new ProgressDialog(this);
+			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
 			new AuthenticateTask(this, username, password).execute();
 		}

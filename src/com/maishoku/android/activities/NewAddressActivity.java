@@ -59,6 +59,7 @@ public class NewAddressActivity extends RedTitleBarActivity {
 			@Override
 			public void onClick(View v) {
 				progressDialog = new ProgressDialog(NewAddressActivity.this);
+				progressDialog.setTitle(R.string.loading);
 				progressDialog.show();
 				String address = newAddressEditText.getText().toString();
 				new NewAddressTask(address).execute();

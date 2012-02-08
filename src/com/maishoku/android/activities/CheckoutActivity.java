@@ -66,6 +66,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 		super.onCreate(savedInstanceState, R.layout.checkout);
 		setCustomTitle(R.string.checkout);
 		progressDialog = new ProgressDialog(this);
+		progressDialog.setTitle(R.string.loading);
 		final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
 		final Button addInstructionsButton = (Button) findViewById(R.id.checkoutAddInstructionsButton);
 		final EditText cardNumberEditText = (EditText) findViewById(R.id.checkoutCardNumberEditText);
@@ -105,7 +106,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 							selectedCreditCard = null;
 							switch (item) {
 							case 0: // saved card
-								progressDialog = new ProgressDialog(CheckoutActivity.this);
+								progressDialog.setTitle(R.string.loading);
 								progressDialog.show();
 								new LoadCreditCardsTask().execute();
 								listView.setVisibility(View.VISIBLE);

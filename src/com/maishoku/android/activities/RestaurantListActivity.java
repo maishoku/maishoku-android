@@ -88,6 +88,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		super.onStart();
 		if (!restaurantsLoaded.get()) {
 			progressDialog = new ProgressDialog(RestaurantListActivity.this);
+			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
 			new LoadRestaurantsTask().execute();
 		}

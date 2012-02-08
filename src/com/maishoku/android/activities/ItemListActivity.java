@@ -80,6 +80,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		super.onStart();
 		if (!itemsLoaded.get()) {
 			progressDialog = new ProgressDialog(this);
+			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
 			new LoadCategoriesTask().execute();
 		}

@@ -158,6 +158,7 @@ public class LocationActivity extends RedTitleBarActivity {
 		super.onStart();
 		adapter.clear();
 		progressDialog = new ProgressDialog(this);
+		progressDialog.setTitle(R.string.loading);
 		progressDialog.show();
 		new LoadAddressesTask().execute();
 	}

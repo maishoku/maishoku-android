@@ -96,6 +96,7 @@ public class SignUpActivity extends RedTitleBarActivity {
 					return;
 				}
 				progressDialog = new ProgressDialog(SignUpActivity.this);
+				progressDialog.setTitle(R.string.loading);
 				progressDialog.show();
 				new SignUpTask(username, password1, email, phoneNumber).execute();
 			}
