@@ -22,7 +22,6 @@ import com.maishoku.android.R;
 import com.maishoku.android.Result;
 import com.maishoku.android.models.Address;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,7 +43,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -82,12 +80,14 @@ public class LocationActivity extends RedTitleBarActivity {
 				startActivity(new Intent(LocationActivity.this, NewAddressActivity.class));
 			}
 		});
-		final ImageButton imageButton = (ImageButton) findViewById(R.id.locationGpsButton);
-		imageButton.setOnClickListener(new OnClickListener() {
+		final Button gpsButton = (Button) findViewById(R.id.locationGpsButton);
+		gpsButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-				final AlertDialog alertDialog = new AlertDialog.Builder(LocationActivity.this).setMessage(R.string.getting_location).show();
+				final ProgressDialog progressDialog = new ProgressDialog(LocationActivity.this);
+				progressDialog.setTitle(R.string.getting_location);
+				progressDialog.show();
 				final LocationListener locationListener = new LocationListener() {
 					public void onLocationChanged(Location location) {
 						if (location.getAccuracy() < 100.0) {
@@ -96,7 +96,7 @@ public class LocationActivity extends RedTitleBarActivity {
 							address.setLat(location.getLatitude());
 							address.setLon(location.getLongitude());
 							API.address = address;
-							alertDialog.dismiss();
+							progressDialog.dismiss();
 							startActivity(new Intent(LocationActivity.this, RestaurantListActivity.class));
 						}
 					}
@@ -107,7 +107,7 @@ public class LocationActivity extends RedTitleBarActivity {
 					public void onProviderDisabled(String provider) {
 					}
 				};
-				alertDialog.setOnDismissListener(new OnDismissListener() {
+				progressDialog.setOnDismissListener(new OnDismissListener() {
 					@Override
 					public void onDismiss(DialogInterface dialog) {
 						locationManager.removeUpdates(locationListener);
@@ -124,10 +124,10 @@ public class LocationActivity extends RedTitleBarActivity {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				if (checkedId == deliveryButton.getId()) {
-					imageButton.setVisibility(View.INVISIBLE);
+					gpsButton.setVisibility(View.INVISIBLE);
 					API.orderMethod = OrderMethod.delivery;
 				} else if (checkedId == pickupButton.getId()) {
-					imageButton.setVisibility(View.VISIBLE);
+					gpsButton.setVisibility(View.VISIBLE);
 					API.orderMethod = OrderMethod.pickup;
 				}
 			}

@@ -6,6 +6,7 @@
     <string name="ok">OK</string>
     <string name="roppongi_hills">東京都港区六本木６−１０−１</string>
     <string name="gps">GPS</string>
+    <string name="search_by_current_location">現在地で探す</string>
     <string name="network_error">ネットワークエラー</string>
     <string name="check_connection">ネットワークの接続状態を確認してください</string>
     <string name="total_price">合計: ¥</string>

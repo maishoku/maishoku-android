@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/titleBarRelativeLayout"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:background="#C70000"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#C70000"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/titleBarTextView"
-        android:background="#C70000"
-        android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_marginLeft="5dp"
-        android:gravity="center" />
+        android:background="#C70000"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
 
 </RelativeLayout>

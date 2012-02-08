@@ -5,16 +5,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/locationLogoutButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-        android:text="@string/logout" />
-
     <RadioGroup
         android:id="@+id/locationRadioGroup"
         android:layout_width="fill_parent"
@@ -30,9 +20,9 @@
             android:id="@+id/locationDeliveryRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:gravity="center"
-            android:text="@string/delivery"
-            android:checked="true" />
+            android:text="@string/delivery" />
 
         <RadioButton
             android:id="@+id/locationPickupRadioButton"
@@ -40,41 +30,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/pickup" />
-
     </RadioGroup>
-
-    <Button
-        android:id="@+id/locationAddNewAddressButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="8dp"
-        android:layout_above="@+id/locationLogoutButton"
-        android:text="@string/add_new_address" />
-
-    <ImageButton
-        android:id="@+id/locationGpsButton"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/gps"
-        android:src="@drawable/gps"
-        android:visibility="invisible" />
-
-    <ListView
-        android:id="@+id/locationListView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/locationAddNewAddressButton"
-        android:layout_below="@+id/locationSelectAddressTextView"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp" >
-    </ListView>
 
     <TextView
         android:id="@+id/locationSelectAddressTextView"
@@ -84,5 +40,48 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="@string/select_address" />
+
+    <ListView
+        android:id="@+id/locationListView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/locationGpsButton"
+        android:layout_below="@+id/locationSelectAddressTextView"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp" >
+    </ListView>
+
+    <Button
+        android:id="@+id/locationGpsButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/locationAddNewAddressButton"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/search_by_current_location"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/locationAddNewAddressButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/locationLogoutButton"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/add_new_address" />
+
+    <Button
+        android:id="@+id/locationLogoutButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/logout" />
 
 </RelativeLayout>

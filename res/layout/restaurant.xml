@@ -7,123 +7,193 @@
 
     <TableLayout
         android:id="@+id/restaurantTableLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="40dp" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow1"
+        <LinearLayout
+            android:id="@+id/restaurantLinearLayout1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/restaurantAddressTextView1"
-                android:layout_marginTop="10dp" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/restaurantTableRow1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow2"
+                <TextView
+                    android:id="@+id/restaurantAddressTextView1"
+                    android:background="@android:color/transparent"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/restaurantTableRow2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
+
+                <TextView
+                    android:id="@+id/restaurantAddressTextView2"
+                    android:background="@android:color/transparent"
+                    android:textSize="12dp" />
+            </TableRow>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/restaurantLinearLayout2"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@android:drawable/editbox_background"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/restaurantAddressTextView2"
-                android:layout_marginTop="1dp" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/restaurantTableRow3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow3"
+                <TextView
+                    android:id="@+id/restaurantPhoneNumberTextView1"
+                    android:background="@android:color/transparent"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/restaurantTableRow4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
+
+                <TextView
+                    android:id="@+id/restaurantPhoneNumberTextView2"
+                    android:background="@android:color/transparent"
+                    android:textSize="12dp" />
+            </TableRow>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/restaurantLinearLayout3"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@android:drawable/editbox_background"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/restaurantPhoneNumberTextView1"
-                android:layout_marginTop="10dp" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/restaurantTableRow5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow4"
+                <TextView
+                    android:id="@+id/restaurantDeliveryTimeTextView1"
+                    android:background="@android:color/transparent"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/restaurantTableRow6"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
+
+                <TextView
+                    android:id="@+id/restaurantDeliveryTimeTextView2"
+                    android:background="@android:color/transparent"
+                    android:textSize="12dp" />
+            </TableRow>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/restaurantLinearLayout4"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@android:drawable/editbox_background"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/restaurantPhoneNumberTextView2"
-                android:layout_marginTop="1dp" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/restaurantTableRow7"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow5"
+                <TextView
+                    android:id="@+id/restaurantMinimumOrderTextView1"
+                    android:background="@android:color/transparent"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/restaurantTableRow8"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
+
+                <TextView
+                    android:id="@+id/restaurantMinimumOrderTextView2"
+                    android:background="@android:color/transparent"
+                    android:textSize="12dp" />
+            </TableRow>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/restaurantLinearLayout5"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@android:drawable/editbox_background"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/restaurantDeliveryTimeTextView1"
-                android:layout_marginTop="10dp" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/restaurantTableRow9"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow6"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+                <TextView
+                    android:id="@+id/restaurantCuisinesTextView1"
+                    android:background="@android:color/transparent"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </TableRow>
 
-            <TextView
-                android:id="@+id/restaurantDeliveryTimeTextView2"
-                android:layout_marginTop="1dp" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/restaurantTableRow10"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent" >
 
-        <TableRow
-            android:id="@+id/restaurantTableRow7"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/restaurantMinimumOrderTextView1"
-                android:layout_marginTop="10dp" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/restaurantTableRow8"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/restaurantMinimumOrderTextView2"
-                android:layout_marginTop="1dp" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/restaurantTableRow9"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/restaurantCuisinesTextView1"
-                android:layout_marginTop="10dp" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/restaurantTableRow10"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/restaurantCuisinesTextView2"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:layout_marginTop="1dp" />
-        </TableRow>
-
+                <TextView
+                    android:id="@+id/restaurantCuisinesTextView2"
+                    android:background="@android:color/transparent"
+                    android:textSize="12dp" />
+            </TableRow>
+        </LinearLayout>
     </TableLayout>
 
     <Button
         android:id="@+id/restaurantButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
         android:text="@string/see_menu" />
 
 </LinearLayout>

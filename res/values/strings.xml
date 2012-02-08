@@ -6,6 +6,7 @@
     <string name="ok">OK</string>
     <string name="roppongi_hills">Roppongi 6&#8211;10&#8211;1, Minato&#8211;ku, Tokyo</string>
     <string name="gps">GPS</string>
+    <string name="search_by_current_location">Search by current location</string>
     <string name="network_error">Network Error</string>
     <string name="check_connection">Please check your network connectivity.</string>
     <string name="total_price">Total Price: ¥</string>
