@@ -41,7 +41,6 @@ public class Restaurant implements Serializable {
 				return Double.compare(a.getUpper_bound(), b.getUpper_bound());
 			}
 		});
-		System.out.println(Arrays.toString(delivery_distances));
 		for (DeliveryDistance deliveryDistance: delivery_distances) {
 			if (distance <= deliveryDistance.getUpper_bound()) {
 				minimumDelivery = deliveryDistance.getMinimum_delivery();

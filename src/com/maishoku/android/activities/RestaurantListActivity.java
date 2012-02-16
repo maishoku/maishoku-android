@@ -54,9 +54,10 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		adapter = new ArrayAdapter<Restaurant>(this, R.layout.list_item);
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		layoutParams.rightMargin = 5;
 		ImageButton imageButton = new ImageButton(this);
-		imageButton.setBackgroundColor(Color.TRANSPARENT);
+		imageButton.setBackgroundDrawable(getResources().getDrawable(android.R.drawable.btn_default_small));
 		imageButton.setImageResource(R.drawable.refresh);
 		imageButton.setLayoutParams(layoutParams);
 		imageButton.setOnClickListener(new OnClickListener() {

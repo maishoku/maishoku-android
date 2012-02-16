@@ -2,6 +2,7 @@ package com.maishoku.android.activities;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.http.HttpEntity;
@@ -52,6 +53,7 @@ public class LocationActivity extends RedTitleBarActivity {
 
 	protected static final String TAG = LocationActivity.class.getSimpleName();
 	
+	private final AtomicBoolean addressesLoaded = new AtomicBoolean(false);
 	private Address selectedAddress;
 	private ArrayAdapter<Address> adapter;
 	private ProgressDialog progressDialog;
@@ -77,6 +79,7 @@ public class LocationActivity extends RedTitleBarActivity {
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				addressesLoaded.set(false);
 				startActivity(new Intent(LocationActivity.this, NewAddressActivity.class));
 			}
 		});
@@ -156,11 +159,13 @@ public class LocationActivity extends RedTitleBarActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		adapter.clear();
-		progressDialog = new ProgressDialog(this);
-		progressDialog.setTitle(R.string.loading);
-		progressDialog.show();
-		new LoadAddressesTask().execute();
+		if (!addressesLoaded.get()) {
+			adapter.clear();
+			progressDialog = new ProgressDialog(this);
+			progressDialog.setTitle(R.string.loading);
+			progressDialog.show();
+			new LoadAddressesTask().execute();
+		}
 	}
 	
 	@Override
@@ -235,6 +240,7 @@ public class LocationActivity extends RedTitleBarActivity {
 				for (Address address: result.resource) {
 					adapter.add(address);
 				}
+				addressesLoaded.set(true);
 			} else {
 				Log.e(TAG, "Failed to load addresses");
 			}

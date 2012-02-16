@@ -62,6 +62,9 @@ public class CartActivity extends RedTitleBarActivity {
 		if (API.orderMethod == OrderMethod.delivery && amountRemaining > 0) {
 			textView.setText(String.format(getResources().getString(R.string.amount_remaining), amountRemaining));
 			button.setEnabled(false);
+		} else if (API.orderMethod == OrderMethod.pickup && totalPrice == 0) {
+			textView.setText(null);
+			button.setEnabled(false);
 		} else {
 			textView.setText(null);
 			button.setEnabled(true);

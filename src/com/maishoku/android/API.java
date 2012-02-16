@@ -74,11 +74,12 @@ public class API {
 	}
 	
 	public static void addCartButton(final Activity activity) {
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		layoutParams.rightMargin = 5;
 		ImageButton imageButton = new ImageButton(activity);
-		imageButton.setBackgroundColor(Color.TRANSPARENT);
+		imageButton.setBackgroundDrawable(activity.getResources().getDrawable(android.R.drawable.btn_default_small));
 		imageButton.setImageResource(R.drawable.cart);
 		imageButton.setLayoutParams(layoutParams);
 		imageButton.setOnClickListener(new OnClickListener() {
