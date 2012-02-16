@@ -1,6 +1,8 @@
 package com.maishoku.android.models;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -12,17 +14,56 @@ public class Restaurant implements Serializable {
 
 	private static final long serialVersionUID = -8267366911607387698L;
 	
+	private int minimumDelivery = Integer.MIN_VALUE;
+	private String commaSeparatedCuisines;
+	
 	private int id;
 	private int minimum_order;
+	private double distance;
 	private DeliveryTime delivery_time;
 	private String name_japanese;
 	private String name_english;
 	private String phone_contact;
 	private String phone_order;
 	private String address;
-	private String commaSeparatedCuisines;
 	private String[] hours;
 	private Cuisine[] cuisines;
+	private DeliveryDistance[] delivery_distances;
+	
+	public int getMinimumDelivery() {
+		if (minimumDelivery != Integer.MIN_VALUE) {
+			return minimumDelivery;
+		}
+		minimumDelivery = minimum_order;
+		Arrays.sort(delivery_distances, new Comparator<DeliveryDistance>() {
+			@Override
+			public int compare(DeliveryDistance a, DeliveryDistance b) {
+				return Double.compare(a.getUpper_bound(), b.getUpper_bound());
+			}
+		});
+		System.out.println(Arrays.toString(delivery_distances));
+		for (DeliveryDistance deliveryDistance: delivery_distances) {
+			if (distance <= deliveryDistance.getUpper_bound()) {
+				minimumDelivery = deliveryDistance.getMinimum_delivery();
+				break;
+			}
+		}
+		return minimumDelivery;
+	}
+	
+	public String getCommaSeparatedCuisines() {
+		if (commaSeparatedCuisines == null) {
+			StringBuilder sb = new StringBuilder();
+			for (Cuisine cuisine: cuisines) {
+				if (sb.length() != 0) {
+					sb.append(", ");
+				}
+				sb.append(API.getLanguage() == Language.ja ? cuisine.getName_japanese() : cuisine.getName_english());
+			}
+			commaSeparatedCuisines = sb.toString();
+		}
+		return commaSeparatedCuisines;
+	}
 	
 	public int getId() {
 		return id;
@@ -38,6 +79,14 @@ public class Restaurant implements Serializable {
 	
 	public void setMinimum_order(int minimum_order) {
 		this.minimum_order = minimum_order;
+	}
+	
+	public double getDistance() {
+		return distance;
+	}
+	
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 	
 	public DeliveryTime getDelivery_time() {
@@ -92,20 +141,6 @@ public class Restaurant implements Serializable {
 		this.address = address;
 	}
 	
-	public String getCommaSeparatedCuisines() {
-		if (commaSeparatedCuisines == null) {
-			StringBuilder sb = new StringBuilder();
-			for (Cuisine cuisine: cuisines) {
-				if (sb.length() != 0) {
-					sb.append(", ");
-				}
-				sb.append(API.getLanguage() == Language.ja ? cuisine.getName_japanese() : cuisine.getName_english());
-			}
-			commaSeparatedCuisines = sb.toString();
-		}
-		return commaSeparatedCuisines;
-	}
-	
 	public String[] getHours() {
 		return hours;
 	}
@@ -120,6 +155,14 @@ public class Restaurant implements Serializable {
 	
 	public void setCuisines(Cuisine[] cuisines) {
 		this.cuisines = cuisines;
+	}
+	
+	public DeliveryDistance[] getDelivery_distances() {
+		return delivery_distances;
+	}
+	
+	public void setDelivery_distances(DeliveryDistance[] delivery_distances) {
+		this.delivery_distances = delivery_distances;
 	}
 	
 	@Override

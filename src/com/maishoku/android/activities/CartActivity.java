@@ -3,6 +3,7 @@ package com.maishoku.android.activities;
 import com.maishoku.android.API;
 import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.R;
+import com.maishoku.android.API.OrderMethod;
 import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Position;
 
@@ -55,10 +56,10 @@ public class CartActivity extends RedTitleBarActivity {
 	
 	private void reloadCart() {
 		int totalPrice = Cart.totalPrice();
-		int amountRemaining = API.restaurant.getMinimum_order() - totalPrice;
+		int amountRemaining = API.restaurant.getMinimumDelivery() - totalPrice;
 		TextView textView = (TextView) findViewById(R.id.cartAmountRemainingTextView);
 		Button button = (Button) findViewById(R.id.cartCheckoutButton);
-		if (amountRemaining > 0) {
+		if (API.orderMethod == OrderMethod.delivery && amountRemaining > 0) {
 			textView.setText(String.format(getResources().getString(R.string.amount_remaining), amountRemaining));
 			button.setEnabled(false);
 		} else {

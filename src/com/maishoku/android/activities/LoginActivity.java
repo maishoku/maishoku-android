@@ -92,14 +92,16 @@ public class LoginActivity extends RedTitleBarActivity implements AuthenticateTa
 		forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String subdomain;
+				String protocol, subdomain;
 				if (Build.DEVICE.startsWith("generic")) {
+					protocol = "http";
 					subdomain = "www-dev";
 				} else {
+					protocol = "https";
 					subdomain = "www";
 				}
 				String language = API.getLanguage().name();
-				String url = String.format("http://%s.maishoku.com/user/recovery/recovery/language/%s/", subdomain, language);
+				String url = String.format("%s://%s.maishoku.com/user/recovery/recovery/language/%s/", protocol, subdomain, language);
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 			}
 		});
