@@ -57,7 +57,7 @@
     <string name="awesome_group">짱그룹</string>
     <string name="restaurants">음식점</string>
     <string name="delivery_time">배달 예정 시간</string>
-    <string name="minimum_order">최저 주문 가격</string>
+    <string name="minimum_delivery">최저 배달 가격</string>
     <string name="cuisines">장르</string>
     <string name="see_menu">메뉴 보기</string>
     <string name="passwords_are_not_same">비밀번호가 일치하지 않습니다</string>
@@ -86,5 +86,6 @@
     <string name="phone_order">전화 번호</string>
     <string name="quantity">수량</string>
     <string name="loading">로드 중&#8230;</string>
+    <string name="forgot_password">비밀번호 찾기</string>
 
 </resources>

@@ -57,7 +57,7 @@
     <string name="awesome_group">Awesome Group</string>
     <string name="restaurants">Restaurants</string>
     <string name="delivery_time">Delivery Time</string>
-    <string name="minimum_order">Minimum Order</string>
+    <string name="minimum_delivery">Minimum Delivery Amount</string>
     <string name="cuisines">Cuisines</string>
     <string name="see_menu">See menu for this restaurant</string>
     <string name="passwords_are_not_same">Passwords are not the same</string>
@@ -86,5 +86,6 @@
     <string name="phone_order">Phone Number</string>
     <string name="quantity">Quantity</string>
     <string name="loading">Loading&#8230;</string>
+    <string name="forgot_password">Forgot Password?</string>
 
 </resources>

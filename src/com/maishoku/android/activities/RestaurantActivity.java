@@ -39,7 +39,7 @@ public class RestaurantActivity extends RedTitleBarActivity {
 		textView = (TextView) findViewById(R.id.restaurantMinimumOrderTextView1);
 		textView.setText(String.format("¥%d", restaurant.getMinimum_order()));
 		textView = (TextView) findViewById(R.id.restaurantMinimumOrderTextView2);
-		textView.setText(R.string.minimum_order);
+		textView.setText(R.string.minimum_delivery);
 		textView = (TextView) findViewById(R.id.restaurantCuisinesTextView1);
 		textView.setText(restaurant.getCommaSeparatedCuisines());
 		textView = (TextView) findViewById(R.id.restaurantCuisinesTextView2);

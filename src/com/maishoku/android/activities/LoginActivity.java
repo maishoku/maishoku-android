@@ -12,6 +12,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -84,6 +86,21 @@ public class LoginActivity extends RedTitleBarActivity implements AuthenticateTa
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+			}
+		});
+		final Button forgotPasswordButton = (Button) findViewById(R.id.loginForgotPasswordButton);
+		forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String subdomain;
+				if (Build.DEVICE.startsWith("generic")) {
+					subdomain = "www-dev";
+				} else {
+					subdomain = "www";
+				}
+				String language = API.getLanguage().name();
+				String url = String.format("http://%s.maishoku.com/user/recovery/recovery/language/%s/", subdomain, language);
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 			}
 		});
 	}
