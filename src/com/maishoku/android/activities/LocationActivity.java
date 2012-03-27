@@ -92,6 +92,7 @@ public class LocationActivity extends RedTitleBarActivity {
 				progressDialog.setTitle(R.string.getting_location);
 				progressDialog.show();
 				final LocationListener locationListener = new LocationListener() {
+					@Override
 					public void onLocationChanged(Location location) {
 						if (location.getAccuracy() < 100.0) {
 							Address address = new Address();
@@ -103,10 +104,13 @@ public class LocationActivity extends RedTitleBarActivity {
 							startActivity(new Intent(LocationActivity.this, RestaurantListActivity.class));
 						}
 					}
+					@Override
 					public void onStatusChanged(String provider, int status, Bundle extras) {
 					}
+					@Override
 					public void onProviderEnabled(String provider) {
 					}
+					@Override
 					public void onProviderDisabled(String provider) {
 					}
 				};

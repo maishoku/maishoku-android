@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 public abstract class RedTitleBarListActivity extends ListActivity {
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(getListView());

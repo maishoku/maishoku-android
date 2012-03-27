@@ -102,6 +102,7 @@ public class CheckoutActivity extends RedTitleBarActivity {
 					AlertDialog.Builder builder = new AlertDialog.Builder(CheckoutActivity.this);
 					builder.setTitle(R.string.credit_card);
 					builder.setItems(items, new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int item) {
 							selectedCreditCard = null;
 							switch (item) {
