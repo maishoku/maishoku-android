@@ -1,10 +1,21 @@
 package com.maishoku.android;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
@@ -22,6 +33,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -56,11 +68,96 @@ public class API {
 		}
 	}
 	
+	private static final Object OBJECT = new Object();
+	
+	/*
+	 * Cache image lookups to ensure that we don't hit the network more than once per activity lifecycle.
+	 * Remove old entries to prevent a memory leak.
+	 */
+	private static final Map<String, Object> urls = Collections.synchronizedMap(new LinkedHashMap<String, Object>() {
+		private static final long serialVersionUID = 6728185220878544083L;
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<String, Object> eldest) {
+			return size() > 100;
+		}
+	});
+	
 	static {
 		if (Build.DEVICE.startsWith("generic")) {
 			BASE_URL = "http://api-dev.maishoku.com";
 		} else {
 			BASE_URL = "https://api.maishoku.com";
+		}
+	}
+	
+	protected static final String TAG = API.class.getSimpleName();
+	/*
+	 * This class was inspired by http://pivotallabs.com/users/tyler/blog/articles/1754-android-image-caching
+	 */
+	private static class Cache {
+		private static String escape(String url) {
+			return url.replace("/", "-").replace(".", "-");
+		}
+		private static File getCacheFile(Context ctx, URI uri) {
+			File cacheDir = ctx.getCacheDir();
+			return new File(cacheDir, escape(uri.getPath()));
+		}
+		public static File get(Context ctx, URI uri) throws IOException {
+			File file = getCacheFile(ctx, uri);
+			if (file.exists()) {
+				Log.i(TAG, "file exists: " + file.getAbsolutePath());
+				return file;
+			} else {
+				Log.i(TAG, "file doesn't exist: " + file.getAbsolutePath());
+				return null;
+			}
+		}
+		public static void put(Context ctx, URI uri, InputStream inputStream) throws IOException {
+			File file = getCacheFile(ctx, uri);
+			Log.i(TAG, "putting file: " + file.getAbsolutePath());
+			FileOutputStream fileOutputStream = new FileOutputStream(file);
+			int i;
+			while ((i = inputStream.read()) != -1) {
+				fileOutputStream.write(i);
+			}
+			fileOutputStream.close();
+		};
+	}
+	
+	public static InputStream getImage(Context ctx, String path) throws IOException, ParseException {
+		URI uri = URI.create(path);
+		URL url = uri.toURL();
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		// First see whether the image is cached
+		File file = Cache.get(ctx, uri);
+		// If the image has been requested in this activity lifecycle, return the cached version
+		if (urls.containsKey(path)) {
+			return file == null ? null : new FileInputStream(file);
+		} else {
+			urls.put(path, OBJECT);
+		}
+		// If the image is cached but hasn't yet been requested in this activity lifecycle, set the If-Modified-Since header appropriately
+		if (file != null) {
+			long lastModified = file.lastModified();
+			Log.i(TAG, "last modified: " + new Date(lastModified));
+			connection.setIfModifiedSince(lastModified);
+		}
+		// Send an HTTP GET request to the server
+		int responseCode = connection.getResponseCode();
+		switch (responseCode) {
+		case HttpURLConnection.HTTP_NOT_MODIFIED:
+			Log.i(TAG, "Not modified - returning cached image");
+			// Not modified - return the cached image
+			return new FileInputStream(file);
+		case HttpURLConnection.HTTP_OK:
+			Log.i(TAG, "OK, returning response from the server");
+			// Write the contents of the new image to the cache and return the newly cached image
+			Cache.put(ctx, uri, connection.getInputStream());
+			return new FileInputStream(Cache.get(ctx, uri));
+		default:
+			Log.i(TAG, "response code == " + responseCode + ", returning null");
+			// Unexpected response code - return null
+			return null;
 		}
 	}
 	

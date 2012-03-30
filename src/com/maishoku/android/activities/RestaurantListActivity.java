@@ -13,37 +13,45 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.maishoku.android.API;
 import com.maishoku.android.IO;
-import com.maishoku.android.RedTitleBarListActivity;
 import com.maishoku.android.R;
+import com.maishoku.android.RedTitleBarListActivity;
 import com.maishoku.android.Result;
 import com.maishoku.android.models.Address;
 import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Restaurant;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RelativeLayout;
-
 public class RestaurantListActivity extends RedTitleBarListActivity {
 
 	protected static final String TAG = RestaurantListActivity.class.getSimpleName();
 	
+	private static final int HEIGHT = 40;
+	private static final int WIDTH = 60;
+	private static final int ADJUSTED_HEIGHT = (int) (HEIGHT * 1.5);
+	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean restaurantsLoaded = new AtomicBoolean(false);
 	private ArrayAdapter<Restaurant> adapter;
+	private Drawable blank;
 	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
@@ -51,7 +59,24 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setCustomTitle(R.string.restaurants);
-		adapter = new ArrayAdapter<Restaurant>(this, R.layout.list_item);
+		blank = getResources().getDrawable(R.drawable.blank60x40);
+		blank.setBounds(0, 0, WIDTH, HEIGHT);
+		adapter = new ArrayAdapter<Restaurant>(this, R.layout.list_item) {
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				View view = super.getView(position, convertView, parent);
+				if (view instanceof TextView) {
+					Restaurant restaurant = getItem(position);
+					TextView textView = (TextView) view;
+					textView.setLines(2);
+					textView.setText(Html.fromHtml(String.format("%s<br><small>%s</small>", restaurant.getName(), restaurant.getCommaSeparatedCuisines())));
+					textView.setCompoundDrawablePadding(textView.getPaddingLeft());
+					textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
+					new LoadDirlogoImageTask(restaurant.getDirlogo_image_url(), textView).execute();
+				}
+				return view;
+			}
+		};
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -93,6 +118,35 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 			progressDialog.show();
 			new LoadRestaurantsTask().execute();
 		}
+	}
+	
+	private class LoadDirlogoImageTask extends AsyncTask<Void, Void, Drawable> {
+		
+		private final String dirlogoImageURL;
+		private final TextView textView;
+		
+		public LoadDirlogoImageTask(String dirlogoImageURL, TextView textView) {
+			this.dirlogoImageURL = dirlogoImageURL;
+			this.textView = textView;
+		}
+		
+		@Override
+		protected Drawable doInBackground(Void... params) {
+			try {
+				return Drawable.createFromStream(API.getImage(RestaurantListActivity.this, dirlogoImageURL), "src");
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Drawable result) {
+			if (result != null) {
+				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
+				textView.setCompoundDrawables(result, null, null, null);
+			}
+		}
+	
 	}
 	
 	private class LoadRestaurantsTask extends AsyncTask<Void, Void, Result<Restaurant[]>> {

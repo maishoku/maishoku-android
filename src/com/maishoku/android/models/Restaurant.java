@@ -21,8 +21,12 @@ public class Restaurant implements Serializable {
 	private int minimum_order;
 	private double distance;
 	private DeliveryTime delivery_time;
+	private String dirlogo_image_url;
+	private String mainlogo_image_url;
 	private String name_japanese;
 	private String name_english;
+	private String description_japanese;
+	private String description_english;
 	private String phone_contact;
 	private String phone_order;
 	private String address;
@@ -96,6 +100,22 @@ public class Restaurant implements Serializable {
 		this.delivery_time = delivery_time;
 	}
 	
+	public String getDirlogo_image_url() {
+		return dirlogo_image_url;
+	}
+	
+	public void setDirlogo_image_url(String dirlogo_image_url) {
+		this.dirlogo_image_url = dirlogo_image_url;
+	}
+	
+	public String getMainlogo_image_url() {
+		return mainlogo_image_url;
+	}
+	
+	public void setMainlogo_image_url(String mainlogo_image_url) {
+		this.mainlogo_image_url = mainlogo_image_url;
+	}
+	
 	public String getName() {
 		return API.getLanguage() == Language.ja ? name_japanese : name_english;
 	}
@@ -114,6 +134,22 @@ public class Restaurant implements Serializable {
 	
 	public void setName_english(String name_english) {
 		this.name_english = name_english;
+	}
+	
+	public String getDescription_japanese() {
+		return description_japanese;
+	}
+	
+	public void setDescription_japanese(String description_japanese) {
+		this.description_japanese = description_japanese;
+	}
+	
+	public String getDescription_english() {
+		return description_english;
+	}
+	
+	public void setDescription_english(String description_english) {
+		this.description_english = description_english;
 	}
 	
 	public String getPhone_contact() {

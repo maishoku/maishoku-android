@@ -19,6 +19,10 @@ public class Item implements Serializable {
 	private OptionSet[] option_sets;
 	private String name_english;
 	private String name_japanese;
+	private String description_english;
+	private String description_japanese;
+	private String default_image_url;
+	private String thumbnail_image_url;
 	private Topping[] toppings;
 	
 	public Category getCategory() {
@@ -63,6 +67,38 @@ public class Item implements Serializable {
 	
 	public void setName_japanese(String name_japanese) {
 		this.name_japanese = name_japanese;
+	}
+	
+	public String getDescription_english() {
+		return description_english;
+	}
+	
+	public void setDescription_english(String description_english) {
+		this.description_english = description_english;
+	}
+	
+	public String getDescription_japanese() {
+		return description_japanese;
+	}
+	
+	public void setDescription_japanese(String description_japanese) {
+		this.description_japanese = description_japanese;
+	}
+	
+	public String getDefault_image_url() {
+		return default_image_url;
+	}
+	
+	public void setDefault_image_url(String default_image_url) {
+		this.default_image_url = default_image_url;
+	}
+	
+	public String getThumbnail_image_url() {
+		return thumbnail_image_url;
+	}
+	
+	public void setThumbnail_image_url(String thumbnail_image_url) {
+		this.thumbnail_image_url = thumbnail_image_url;
 	}
 	
 	public boolean isAvailable() {
