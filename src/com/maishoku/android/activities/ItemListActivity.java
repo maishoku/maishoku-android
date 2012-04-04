@@ -2,6 +2,8 @@ package com.maishoku.android.activities;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -46,6 +48,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	private static final int ADJUSTED_HEIGHT = (int) (HEIGHT * 1.5);
 	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean itemsLoaded = new AtomicBoolean(false);
+	private final HashMap<Integer, TextView> textViewsByPosition = new HashMap<Integer, TextView>();
 	private ArrayAdapter<Item> adapter;
 	private Drawable blank;
 	private ProgressDialog progressDialog;
@@ -66,19 +69,35 @@ public class ItemListActivity extends RedTitleBarListActivity {
 			@Override
 			public View getView(int position, View convertView, ViewGroup parent) {
 				View view = super.getView(position, convertView, parent);
-				if (isEnabled(position)) {
+				boolean enabled = isEnabled(position);
+				if (enabled) {
 					view.setBackgroundColor(Color.WHITE);
-					if (view instanceof TextView) {
+				} else {
+					view.setBackgroundColor(Color.GRAY);
+				}
+				if (view instanceof TextView) {
+					TextView textView = (TextView) view;
+					LinkedList<Integer> positions = new LinkedList<Integer>();
+					for (HashMap.Entry<Integer, TextView> entry: textViewsByPosition.entrySet()) {
+						if (entry.getValue() == textView && entry.getKey() != position) {
+							positions.add(entry.getKey());
+						}
+					}
+					for (Integer i: positions) {
+						textViewsByPosition.put(i, null);
+					}
+					if (enabled) {
+						textViewsByPosition.put(position, textView);
 						Item item = getItem(position);
-						TextView textView = (TextView) view;
 						textView.setLines(2);
 						textView.setText(Html.fromHtml(String.format("%s<br><small>¥%d</small>", item.getName(), item.getPrice())));
 						textView.setCompoundDrawablePadding(textView.getPaddingLeft());
 						textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
-						new LoadThumbnailImageTask(item.getThumbnail_image_url(), textView).execute();
+						new LoadThumbnailImageTask(item.getThumbnail_image_url(), position).execute();
+					} else {
+						textView.setLines(1);
+						textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 					}
-				} else {
-					view.setBackgroundColor(Color.GRAY);
 				}
 				return view;
 			}
@@ -106,13 +125,13 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	}
 	
 	private class LoadThumbnailImageTask extends AsyncTask<Void, Void, Drawable> {
-		
+	
 		private final String thumbnailImageURL;
-		private final TextView textView;
+		private final int position;
 		
-		public LoadThumbnailImageTask(String thumbnailImageURL, TextView textView) {
+		public LoadThumbnailImageTask(String thumbnailImageURL, int position) {
 			this.thumbnailImageURL = thumbnailImageURL;
-			this.textView = textView;
+			this.position = position;
 		}
 		
 		@Override
@@ -126,7 +145,8 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		
 		@Override
 		protected void onPostExecute(Drawable result) {
-			if (result != null) {
+			TextView textView = textViewsByPosition.get(position);
+			if (result != null && textView != null) {
 				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
 				textView.setCompoundDrawables(result, null, null, null);
 			}
