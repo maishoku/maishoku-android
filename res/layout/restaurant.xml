@@ -5,13 +5,46 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/restaurantImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:contentDescription="@string/logo" >
+        </ImageView>
+
+        <ScrollView
+            android:id="@+id/restaurantScrollView"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/restaurantTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+        </ScrollView>
+    </LinearLayout>
+
     <TableLayout
         android:id="@+id/restaurantTableLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="40dp" >
+        android:layout_marginTop="15dp" >
 
         <LinearLayout
             android:id="@+id/restaurantLinearLayout1"
@@ -28,6 +61,7 @@
 
                 <TextView
                     android:id="@+id/restaurantAddressTextView1"
+                    android:layout_width="fill_parent"
                     android:background="@android:color/transparent"
                     android:ellipsize="end"
                     android:singleLine="true"
@@ -44,6 +78,7 @@
                 <TextView
                     android:id="@+id/restaurantAddressTextView2"
                     android:background="@android:color/transparent"
+                    android:text="@string/address"
                     android:textSize="12dp" />
             </TableRow>
         </LinearLayout>
@@ -52,7 +87,7 @@
             android:id="@+id/restaurantLinearLayout2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="0dp"
             android:background="@android:drawable/editbox_background"
             android:orientation="vertical" >
 
@@ -78,6 +113,7 @@
                 <TextView
                     android:id="@+id/restaurantPhoneNumberTextView2"
                     android:background="@android:color/transparent"
+                    android:text="@string/phone_order"
                     android:textSize="12dp" />
             </TableRow>
         </LinearLayout>
@@ -86,7 +122,7 @@
             android:id="@+id/restaurantLinearLayout3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="0dp"
             android:background="@android:drawable/editbox_background"
             android:orientation="vertical" >
 
@@ -97,7 +133,7 @@
                 android:background="@android:color/transparent" >
 
                 <TextView
-                    android:id="@+id/restaurantDeliveryTimeTextView1"
+                    android:id="@+id/restaurantHoursTextView1"
                     android:background="@android:color/transparent"
                     android:textSize="16dp"
                     android:textStyle="bold" />
@@ -110,8 +146,9 @@
                 android:background="@android:color/transparent" >
 
                 <TextView
-                    android:id="@+id/restaurantDeliveryTimeTextView2"
+                    android:id="@+id/restaurantHoursTextView2"
                     android:background="@android:color/transparent"
+                    android:text="@string/todays_hours"
                     android:textSize="12dp" />
             </TableRow>
         </LinearLayout>
@@ -131,7 +168,7 @@
                 android:background="@android:color/transparent" >
 
                 <TextView
-                    android:id="@+id/restaurantMinimumDeliveryTextView1"
+                    android:id="@+id/restaurantDeliveryTimeTextView1"
                     android:background="@android:color/transparent"
                     android:textSize="16dp"
                     android:textStyle="bold" />
@@ -144,8 +181,9 @@
                 android:background="@android:color/transparent" >
 
                 <TextView
-                    android:id="@+id/restaurantMinimumDeliveryTextView2"
+                    android:id="@+id/restaurantDeliveryTimeTextView2"
                     android:background="@android:color/transparent"
+                    android:text="@string/delivery_time"
                     android:textSize="12dp" />
             </TableRow>
         </LinearLayout>
@@ -154,7 +192,7 @@
             android:id="@+id/restaurantLinearLayout5"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="0dp"
             android:background="@android:drawable/editbox_background"
             android:orientation="vertical" >
 
@@ -165,7 +203,7 @@
                 android:background="@android:color/transparent" >
 
                 <TextView
-                    android:id="@+id/restaurantCuisinesTextView1"
+                    android:id="@+id/restaurantMinimumDeliveryTextView1"
                     android:background="@android:color/transparent"
                     android:ellipsize="end"
                     android:singleLine="true"
@@ -180,8 +218,9 @@
                 android:background="@android:color/transparent" >
 
                 <TextView
-                    android:id="@+id/restaurantCuisinesTextView2"
+                    android:id="@+id/restaurantMinimumDeliveryTextView2"
                     android:background="@android:color/transparent"
+                    android:text="@string/minimum_delivery"
                     android:textSize="12dp" />
             </TableRow>
         </LinearLayout>

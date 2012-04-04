@@ -24,22 +24,30 @@ import com.maishoku.android.models.Item;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ItemListActivity extends RedTitleBarListActivity {
 
 	protected static final String TAG = ItemListActivity.class.getSimpleName();
 	
+	private static final int HEIGHT = 40;
+	private static final int WIDTH = 60;
+	private static final int ADJUSTED_HEIGHT = (int) (HEIGHT * 1.5);
+	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean itemsLoaded = new AtomicBoolean(false);
 	private ArrayAdapter<Item> adapter;
+	private Drawable blank;
 	private ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
@@ -48,6 +56,8 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		super.onCreate(savedInstanceState);
 		setCustomTitle(API.restaurant.getName());
 		API.addCartButton(this);
+		blank = getResources().getDrawable(R.drawable.blank60x40);
+		blank.setBounds(0, 0, WIDTH, HEIGHT);
 		adapter = new ArrayAdapter<Item>(this, R.layout.list_item) {
 			@Override
 			public boolean isEnabled(int position) {
@@ -58,9 +68,18 @@ public class ItemListActivity extends RedTitleBarListActivity {
 				View view = super.getView(position, convertView, parent);
 				if (isEnabled(position)) {
 					view.setBackgroundColor(Color.WHITE);
+					if (view instanceof TextView) {
+						Item item = getItem(position);
+						TextView textView = (TextView) view;
+						textView.setLines(2);
+						textView.setText(Html.fromHtml(String.format("%s<br><small>¥%d</small>", item.getName(), item.getPrice())));
+						textView.setCompoundDrawablePadding(textView.getPaddingLeft());
+						textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
+						new LoadThumbnailImageTask(item.getThumbnail_image_url(), textView).execute();
+					}
 				} else {
 					view.setBackgroundColor(Color.GRAY);
-				} 
+				}
 				return view;
 			}
 		};
@@ -84,6 +103,35 @@ public class ItemListActivity extends RedTitleBarListActivity {
 			progressDialog.show();
 			new LoadCategoriesTask().execute();
 		}
+	}
+	
+	private class LoadThumbnailImageTask extends AsyncTask<Void, Void, Drawable> {
+		
+		private final String thumbnailImageURL;
+		private final TextView textView;
+		
+		public LoadThumbnailImageTask(String thumbnailImageURL, TextView textView) {
+			this.thumbnailImageURL = thumbnailImageURL;
+			this.textView = textView;
+		}
+		
+		@Override
+		protected Drawable doInBackground(Void... params) {
+			try {
+				return Drawable.createFromStream(API.getImage(ItemListActivity.this, thumbnailImageURL), "src");
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Drawable result) {
+			if (result != null) {
+				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
+				textView.setCompoundDrawables(result, null, null, null);
+			}
+		}
+	
 	}
 	
 	private class LoadCategoriesTask extends AsyncTask<Void, Void, Result<Category[]>> {

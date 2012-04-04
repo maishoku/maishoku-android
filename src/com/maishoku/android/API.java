@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -45,6 +44,7 @@ public class API {
 	public static final int MAISHOKU_RED = Color.rgb(180, 0, 0); // halfway between the 200-160 gradient used in the logo
 	public static final Date NULL_DATE = new Date(0, 0, 0);
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("EEE", Locale.US);
 	public static final String BASE_URL;
 	public static final String API_VERSION = "1.0";
 	public static final String PREFS = "PREFS";
@@ -124,7 +124,7 @@ public class API {
 		};
 	}
 	
-	public static InputStream getImage(Context ctx, String path) throws IOException, ParseException {
+	public static InputStream getImage(Context ctx, String path) throws IOException {
 		URI uri = URI.create(path);
 		URL url = uri.toURL();
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -159,6 +159,10 @@ public class API {
 			// Unexpected response code - return null
 			return null;
 		}
+	}
+	
+	public static String todaysDateEEE() {
+		return DAY_FORMAT.format(new Date()).toUpperCase();
 	}
 	
 	public static Language getLanguage() {

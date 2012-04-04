@@ -30,7 +30,7 @@ public class Restaurant implements Serializable {
 	private String phone_contact;
 	private String phone_order;
 	private String address;
-	private String[] hours;
+	private RestaurantHours[] hours;
 	private Cuisine[] cuisines;
 	private DeliveryDistance[] delivery_distances;
 	
@@ -152,6 +152,10 @@ public class Restaurant implements Serializable {
 		this.description_english = description_english;
 	}
 	
+	public String getDescription() {
+		return API.getLanguage() == Language.ja ? description_japanese : description_english;
+	}
+	
 	public String getPhone_contact() {
 		return phone_contact;
 	}
@@ -176,11 +180,11 @@ public class Restaurant implements Serializable {
 		this.address = address;
 	}
 	
-	public String[] getHours() {
+	public RestaurantHours[] getHours() {
 		return hours;
 	}
 	
-	public void setHours(String[] hours) {
+	public void setHours(RestaurantHours[] hours) {
 		this.hours = hours;
 	}
 	
