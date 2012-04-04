@@ -29,6 +29,7 @@ import com.maishoku.android.models.Position;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.AdapterView.OnItemClickListener;
@@ -220,10 +222,10 @@ public class ItemActivity extends RedTitleBarActivity {
 				Log.i(TAG, "Successfully loaded item");
 				item = result.resource;
 				position = new Position(item, 0);
-				TextView textView = (TextView) findViewById(R.id.itemPriceTextView);
-				textView.append(String.valueOf(item.getPrice()));
-				textView = (TextView) findViewById(R.id.itemCategoryTextView);
-				textView.append(item.getCategory().getName());
+				new LoadDefaultImageTask(item.getDefault_image_url()).execute();
+				setTitle(item.getCategory().getName());
+				TextView textView = (TextView) findViewById(R.id.itemTextView);
+				textView.setText(String.format("%s\n%d\n%s", item.getName(), item.getPrice(), item.getDescription()));
 				List<Option> positionOptions = position.getOptions();
 				optionSets = new ArrayList<OptionSet>();
 				for (OptionSet optionSet: item.getOption_sets()) {
@@ -250,6 +252,33 @@ public class ItemActivity extends RedTitleBarActivity {
 				itemLoaded.set(true);
 			} else {
 				Log.e(TAG, "Failed to load item");
+			}
+		}
+	
+	}
+	
+	private class LoadDefaultImageTask extends AsyncTask<Void, Void, Drawable> {
+		
+		private final String defaultImageURL;
+		
+		public LoadDefaultImageTask(String defaultImageURL) {
+			this.defaultImageURL = defaultImageURL;
+		}
+		
+		@Override
+		protected Drawable doInBackground(Void... params) {
+			try {
+				return Drawable.createFromStream(API.getImage(ItemActivity.this, defaultImageURL), "src");
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Drawable result) {
+			if (result != null) {
+				ImageView imageView = (ImageView) findViewById(R.id.itemImageView);
+				imageView.setImageDrawable(result);
 			}
 		}
 	

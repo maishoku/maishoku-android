@@ -3,50 +3,65 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/itemPriceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/itemLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/price" />
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/itemCategoryTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/itemPriceTextView"
-        android:text="@string/empty" />
+        <ImageView
+            android:id="@+id/itemImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:contentDescription="@string/logo" >
+        </ImageView>
+
+        <ScrollView
+            android:id="@+id/itemScrollView"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/itemTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+        </ScrollView>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/itemListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/itemAddToppingsButton"
-        android:layout_below="@+id/itemCategoryTextView"
+        android:layout_below="@+id/itemLinearLayout"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp" >
-
     </ListView>
 
     <Button
         android:id="@+id/itemAddToppingsButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:layout_above="@+id/itemQuantityTextView"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:state_enabled="false"
         android:text="@string/add_toppings" />
 
     <TextView
@@ -59,18 +74,17 @@
 
     <SeekBar
         android:id="@+id/itemSeekBar"
-        android:max="10"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/itemAddToCartButton"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="20dp" />
+        android:max="10" />
 
     <Button
         android:id="@+id/itemAddToCartButton"
-        android:enabled="false"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/itemCurrentlyInCartTextView"
@@ -78,14 +92,15 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:state_enabled="false"
         android:text="@string/add_to_cart" />
 
     <TextView
         android:id="@+id/itemCurrentlyInCartTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="@string/quantity_in_cart" />
 
 </RelativeLayout>

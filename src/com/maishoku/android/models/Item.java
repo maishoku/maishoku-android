@@ -85,6 +85,10 @@ public class Item implements Serializable {
 		this.description_japanese = description_japanese;
 	}
 	
+	public String getDescription() {
+		return API.getLanguage() == Language.ja ? description_japanese : description_english;
+	}
+	
 	public String getDefault_image_url() {
 		return default_image_url;
 	}
