@@ -1,9 +1,11 @@
 package com.maishoku.android.activities;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,6 +23,8 @@ import com.maishoku.android.IO;
 import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.R;
 import com.maishoku.android.Result;
+import com.maishoku.android.ScalingUtilities;
+import com.maishoku.android.ScalingUtilities.ScalingLogic;
 import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Item;
 import com.maishoku.android.models.Option;
@@ -29,11 +33,13 @@ import com.maishoku.android.models.Position;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,7 +47,9 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -54,12 +62,13 @@ public class ItemActivity extends RedTitleBarActivity {
 	
 	private ProgressDialog progressDialog;
 	private final AtomicBoolean itemLoaded = new AtomicBoolean(false);
-	private ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-	private SimpleAdapter optionSetAdapter;
+	private ArrayList<HashMap<String, CharSequence>> list = new ArrayList<HashMap<String, CharSequence>>();
 	private ArrayList<OptionSet> optionSets = null;
-	private int selectedOptionSetIndex;
-	private Position position = null;
+	private HashSet<AsyncTask<?, ?, ?>> tasks = new HashSet<AsyncTask<?, ?, ?>>();
 	private Item item = null;
+	private Position position = null;
+	private SimpleAdapter optionSetAdapter;
+	private int selectedOptionSetIndex;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -71,11 +80,14 @@ public class ItemActivity extends RedTitleBarActivity {
 		final Button addToppingsButton = (Button) findViewById(R.id.itemAddToppingsButton);
 		final ListView optionsListView = (ListView) findViewById(R.id.itemListView);
 		item = API.item;
-		setCustomTitle(item.getName());
+		setCustomTitle(item.getCategory().getName());
 		API.addCartButton(this);
 		addToCartButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (position == null) {
+					return;
+				}
 				position.setQuantity(seekBar.getProgress());
 				Cart.addPosition(position);
 				position = new Position(item, 0);
@@ -83,9 +95,9 @@ public class ItemActivity extends RedTitleBarActivity {
 				for (OptionSet optionSet: optionSets) {
 					Option option = optionSet.getOptions()[0];
 					position.getOptions().add(option);
-					HashMap<String, String> map = new HashMap<String, String>();
-					map.put("title", optionSet.toString());
-					map.put("subtitle", option.toString());
+					HashMap<String, CharSequence> map = new HashMap<String, CharSequence>();
+					map.put("title", Html.fromHtml(optionSet.toString()));
+					map.put("subtitle", Html.fromHtml(option.toString()));
 					list.add(map);
 				}
 				optionSetAdapter.notifyDataSetChanged();
@@ -152,8 +164,8 @@ public class ItemActivity extends RedTitleBarActivity {
 				}
 			}
 		}
-		HashMap<String, String> map = list.get(selectedOptionSetIndex);
-		map.put("subtitle", option.toString());
+		HashMap<String, CharSequence> map = list.get(selectedOptionSetIndex);
+		map.put("subtitle", Html.fromHtml(option.toString()));
 		optionSetAdapter.notifyDataSetChanged();
 		positionOptions.add(option);
 		return true;
@@ -173,7 +185,17 @@ public class ItemActivity extends RedTitleBarActivity {
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
-			new LoadItemTask().execute();
+			LoadItemTask task = new LoadItemTask();
+			tasks.add(task);
+			task.execute();
+		}
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		for (AsyncTask<?, ?, ?> task: tasks) {
+			task.cancel(true);
 		}
 	}
 	
@@ -217,15 +239,25 @@ public class ItemActivity extends RedTitleBarActivity {
 		
 		@Override
 		protected void onPostExecute(Result<Item> result) {
+			if (isCancelled()) {
+				return;
+			}
 			progressDialog.dismiss();
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded item");
 				item = result.resource;
 				position = new Position(item, 0);
-				new LoadDefaultImageTask(item.getDefault_image_url()).execute();
+				LinearLayout linearLayout = (LinearLayout) findViewById(R.id.itemLinearLayout);
+				RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+				Display display = getWindowManager().getDefaultDisplay();
+				int width = (display.getWidth() - layoutParams.leftMargin - layoutParams.rightMargin) / 3;
+				LoadDefaultImageTask task = new LoadDefaultImageTask(item.getDefault_image_url(), width, layoutParams.height);
+				tasks.add(task);
+				task.execute();
 				setTitle(item.getCategory().getName());
 				TextView textView = (TextView) findViewById(R.id.itemTextView);
-				textView.setText(String.format("%s\n%d\n%s", item.getName(), item.getPrice(), item.getDescription()));
+				CharSequence description = item.getDescription() == null ? "" : Html.fromHtml(item.getDescription());
+				textView.setText(String.format("%s\n¥%d\n%s", item.getName(), item.getPrice(), description));
 				List<Option> positionOptions = position.getOptions();
 				optionSets = new ArrayList<OptionSet>();
 				for (OptionSet optionSet: item.getOption_sets()) {
@@ -234,9 +266,9 @@ public class ItemActivity extends RedTitleBarActivity {
 						optionSets.add(optionSet);
 						Option option = options[0];
 						positionOptions.add(option);
-						HashMap<String, String> map = new HashMap<String, String>();
-						map.put("title", optionSet.toString());
-						map.put("subtitle", option.toString());
+						HashMap<String, CharSequence> map = new HashMap<String, CharSequence>();
+						map.put("title", Html.fromHtml(optionSet.toString()));
+						map.put("subtitle", Html.fromHtml(option.toString()));
 						list.add(map);
 					}
 				}
@@ -257,28 +289,43 @@ public class ItemActivity extends RedTitleBarActivity {
 	
 	}
 	
-	private class LoadDefaultImageTask extends AsyncTask<Void, Void, Drawable> {
+	private class LoadDefaultImageTask extends AsyncTask<Void, Void, Bitmap> {
 		
 		private final String defaultImageURL;
+		private final int width;
+		private final int height;
 		
-		public LoadDefaultImageTask(String defaultImageURL) {
+		public LoadDefaultImageTask(String defaultImageURL, int width, int height) {
 			this.defaultImageURL = defaultImageURL;
+			this.width = width;
+			this.height = height;
 		}
 		
 		@Override
-		protected Drawable doInBackground(Void... params) {
+		protected Bitmap doInBackground(Void... params) {
 			try {
-				return Drawable.createFromStream(API.getImage(ItemActivity.this, defaultImageURL), "src");
+				File file = API.getImageFile(ItemActivity.this, defaultImageURL);
+				Bitmap unscaledBitmap = ScalingUtilities.decodeFile(file, width, height, ScalingLogic.FIT);
+				if (unscaledBitmap == null) {
+					return null;
+				} else {
+					Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, width, height, ScalingLogic.FIT);
+					unscaledBitmap.recycle();
+					return scaledBitmap;
+				}
 			} catch (Exception e) {
 				return null;
 			}
 		}
 		
 		@Override
-		protected void onPostExecute(Drawable result) {
+		protected void onPostExecute(Bitmap result) {
+			if (isCancelled()) {
+				return;
+			}
 			if (result != null) {
 				ImageView imageView = (ImageView) findViewById(R.id.itemImageView);
-				imageView.setImageDrawable(result);
+				imageView.setImageBitmap(result);
 			}
 		}
 	

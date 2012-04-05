@@ -32,7 +32,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -90,7 +89,6 @@ public class API {
 		}
 	}
 	
-	protected static final String TAG = API.class.getSimpleName();
 	/*
 	 * This class was inspired by http://pivotallabs.com/users/tyler/blog/articles/1754-android-image-caching
 	 */
@@ -105,16 +103,13 @@ public class API {
 		public static File get(Context ctx, URI uri) throws IOException {
 			File file = getCacheFile(ctx, uri);
 			if (file.exists()) {
-				Log.i(TAG, "file exists: " + file.getAbsolutePath());
 				return file;
 			} else {
-				Log.i(TAG, "file doesn't exist: " + file.getAbsolutePath());
 				return null;
 			}
 		}
 		public static void put(Context ctx, URI uri, InputStream inputStream) throws IOException {
 			File file = getCacheFile(ctx, uri);
-			Log.i(TAG, "putting file: " + file.getAbsolutePath());
 			FileOutputStream fileOutputStream = new FileOutputStream(file);
 			int i;
 			while ((i = inputStream.read()) != -1) {
@@ -124,7 +119,7 @@ public class API {
 		};
 	}
 	
-	public static InputStream getImage(Context ctx, String path) throws IOException {
+	public static File getImageFile(Context ctx, String path) throws IOException {
 		URI uri = URI.create(path);
 		URL url = uri.toURL();
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -132,33 +127,34 @@ public class API {
 		File file = Cache.get(ctx, uri);
 		// If the image has been requested in this activity lifecycle, return the cached version
 		if (urls.containsKey(path)) {
-			return file == null ? null : new FileInputStream(file);
+			return file == null ? null : file;
 		} else {
 			urls.put(path, OBJECT);
 		}
 		// If the image is cached but hasn't yet been requested in this activity lifecycle, set the If-Modified-Since header appropriately
 		if (file != null) {
 			long lastModified = file.lastModified();
-			Log.i(TAG, "last modified: " + new Date(lastModified));
 			connection.setIfModifiedSince(lastModified);
 		}
 		// Send an HTTP GET request to the server
 		int responseCode = connection.getResponseCode();
 		switch (responseCode) {
 		case HttpURLConnection.HTTP_NOT_MODIFIED:
-			Log.i(TAG, "Not modified - returning cached image");
 			// Not modified - return the cached image
-			return new FileInputStream(file);
+			return file;
 		case HttpURLConnection.HTTP_OK:
-			Log.i(TAG, "OK, returning response from the server");
 			// Write the contents of the new image to the cache and return the newly cached image
 			Cache.put(ctx, uri, connection.getInputStream());
-			return new FileInputStream(Cache.get(ctx, uri));
+			return Cache.get(ctx, uri);
 		default:
-			Log.i(TAG, "response code == " + responseCode + ", returning null");
 			// Unexpected response code - return null
 			return null;
 		}
+	}
+	
+	public static InputStream getImageInputStream(Context ctx, String path) throws IOException {
+		File file = getImageFile(ctx, path);
+		return file == null ? null : new FileInputStream(file);
 	}
 	
 	public static String todaysDateEEE() {

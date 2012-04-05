@@ -1,5 +1,6 @@
 package com.maishoku.android.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,22 +8,28 @@ import java.util.Comparator;
 import com.maishoku.android.API;
 import com.maishoku.android.RedTitleBarActivity;
 import com.maishoku.android.R;
+import com.maishoku.android.ScalingUtilities;
+import com.maishoku.android.ScalingUtilities.ScalingLogic;
 import com.maishoku.android.models.Restaurant;
 import com.maishoku.android.models.RestaurantHours;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RestaurantActivity extends RedTitleBarActivity {
 
 	protected static final String TAG = RestaurantActivity.class.getSimpleName();
+	private LoadMainlogoImageTask task = null;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -31,11 +38,15 @@ public class RestaurantActivity extends RedTitleBarActivity {
 		Restaurant restaurant = API.restaurant;
 		setCustomTitle(restaurant.getName());
 		API.addCartButton(this);
-		ImageView imageView = (ImageView) findViewById(R.id.restaurantImageView);
-		new LoadMainlogoImageTask(restaurant.getMainlogo_image_url(), imageView).execute();
+		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.restaurantLinearLayout);
+		LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
+		Display display = getWindowManager().getDefaultDisplay();
+		int width = (display.getWidth() - layoutParams.leftMargin - layoutParams.rightMargin) / 2;
+		task = new LoadMainlogoImageTask(restaurant.getMainlogo_image_url(), width, layoutParams.height);
+		task.execute();
 		TextView textView;
 		textView = (TextView) findViewById(R.id.restaurantTextView);
-		textView.setText(restaurant.getDescription());
+		textView.setText(Html.fromHtml(restaurant.getDescription()));
 		textView = (TextView) findViewById(R.id.restaurantAddressTextView1);
 		textView.setText(restaurant.getAddress());
 		textView = (TextView) findViewById(R.id.restaurantPhoneNumberTextView1);
@@ -54,6 +65,14 @@ public class RestaurantActivity extends RedTitleBarActivity {
 				startActivity(new Intent(RestaurantActivity.this, ItemListActivity.class));
 			}
 		});
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if (task != null) {
+			task.cancel(true);
+		}
 	}
 	
 	private String todaysHours() {
@@ -91,29 +110,44 @@ public class RestaurantActivity extends RedTitleBarActivity {
 		return h;
 	}
 	
-	private class LoadMainlogoImageTask extends AsyncTask<Void, Void, Drawable> {
+	private class LoadMainlogoImageTask extends AsyncTask<Void, Void, Bitmap> {
 		
 		private final String mainlogoImageURL;
-		private final ImageView imageView;
+		private final int width;
+		private final int height;
 		
-		public LoadMainlogoImageTask(String mainlogoImageURL, ImageView imageView) {
+		public LoadMainlogoImageTask(String mainlogoImageURL, int width, int height) {
 			this.mainlogoImageURL = mainlogoImageURL;
-			this.imageView = imageView;
+			this.width = width;
+			this.height = height;
 		}
 		
 		@Override
-		protected Drawable doInBackground(Void... params) {
+		protected Bitmap doInBackground(Void... params) {
 			try {
-				return Drawable.createFromStream(API.getImage(RestaurantActivity.this, mainlogoImageURL), "src");
+				File file = API.getImageFile(RestaurantActivity.this, mainlogoImageURL);
+				Bitmap unscaledBitmap = ScalingUtilities.decodeFile(file, width, height, ScalingLogic.FIT);
+				if (unscaledBitmap == null) {
+					return null;
+				} else {
+					Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, width, height, ScalingLogic.FIT);
+					unscaledBitmap.recycle();
+					return scaledBitmap;
+				}
 			} catch (Exception e) {
 				return null;
 			}
 		}
 		
 		@Override
-		protected void onPostExecute(Drawable result) {
+		protected void onPostExecute(Bitmap result) {
+			task = null;
+			if (isCancelled()) {
+				return;
+			}
 			if (result != null) {
-				imageView.setImageDrawable(result);
+				ImageView imageView = (ImageView) findViewById(R.id.restaurantImageView);
+				imageView.setImageBitmap(result);
 			}
 		}
 	

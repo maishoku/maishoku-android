@@ -2,6 +2,7 @@ package com.maishoku.android.activities;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -50,6 +51,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	private static final int ADJUSTED_HEIGHT = (int) (HEIGHT * 1.5);
 	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean restaurantsLoaded = new AtomicBoolean(false);
+	private final HashSet<AsyncTask<?, ?, ?>> tasks = new HashSet<AsyncTask<?, ?, ?>>();
 	private ArrayAdapter<Restaurant> adapter;
 	private Drawable blank;
 	private ProgressDialog progressDialog;
@@ -72,7 +74,9 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 					textView.setText(Html.fromHtml(String.format("%s<br><small>%s</small>", restaurant.getName(), restaurant.getCommaSeparatedCuisines())));
 					textView.setCompoundDrawablePadding(textView.getPaddingLeft());
 					textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
-					new LoadDirlogoImageTask(restaurant.getDirlogo_image_url(), textView).execute();
+					LoadDirlogoImageTask task = new LoadDirlogoImageTask(restaurant.getDirlogo_image_url(), textView);
+					tasks.add(task);
+					task.execute();
 				}
 				return view;
 			}
@@ -116,7 +120,17 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 			progressDialog = new ProgressDialog(RestaurantListActivity.this);
 			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
-			new LoadRestaurantsTask().execute();
+			LoadRestaurantsTask task = new LoadRestaurantsTask();
+			tasks.add(task);
+			task.execute();
+		}
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		for (AsyncTask<?, ?, ?> task: tasks) {
+			task.cancel(true);
 		}
 	}
 	
@@ -133,7 +147,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		@Override
 		protected Drawable doInBackground(Void... params) {
 			try {
-				return Drawable.createFromStream(API.getImage(RestaurantListActivity.this, dirlogoImageURL), "src");
+				return Drawable.createFromPath(API.getImageFile(RestaurantListActivity.this, dirlogoImageURL).getAbsolutePath());
 			} catch (Exception e) {
 				return null;
 			}
@@ -141,6 +155,9 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		
 		@Override
 		protected void onPostExecute(Drawable result) {
+			if (isCancelled()) {
+				return;
+			}
 			if (result != null) {
 				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
 				textView.setCompoundDrawables(result, null, null, null);
@@ -193,6 +210,9 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		@Override
 		protected void onPostExecute(Result<Restaurant[]> result) {
 			progressDialog.dismiss();
+			if (isCancelled()) {
+				return;
+			}
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded restaurants");
 				adapter.clear();

@@ -3,6 +3,7 @@ package com.maishoku.android.activities;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -49,6 +50,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean itemsLoaded = new AtomicBoolean(false);
 	private final HashMap<Integer, TextView> textViewsByPosition = new HashMap<Integer, TextView>();
+	private final HashSet<AsyncTask<?, ?, ?>> tasks = new HashSet<AsyncTask<?, ?, ?>>();
 	private ArrayAdapter<Item> adapter;
 	private Drawable blank;
 	private ProgressDialog progressDialog;
@@ -93,7 +95,9 @@ public class ItemListActivity extends RedTitleBarListActivity {
 						textView.setText(Html.fromHtml(String.format("%s<br><small>¥%d</small>", item.getName(), item.getPrice())));
 						textView.setCompoundDrawablePadding(textView.getPaddingLeft());
 						textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
-						new LoadThumbnailImageTask(item.getThumbnail_image_url(), position).execute();
+						LoadThumbnailImageTask task = new LoadThumbnailImageTask(item.getThumbnail_image_url(), position);
+						tasks.add(task);
+						task.execute();
 					} else {
 						textView.setLines(1);
 						textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -120,7 +124,17 @@ public class ItemListActivity extends RedTitleBarListActivity {
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setTitle(R.string.loading);
 			progressDialog.show();
-			new LoadCategoriesTask().execute();
+			LoadCategoriesTask task = new LoadCategoriesTask();
+			tasks.add(task);
+			task.execute();
+		}
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		for (AsyncTask<?, ?, ?> task: tasks) {
+			task.cancel(true);
 		}
 	}
 	
@@ -137,7 +151,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		@Override
 		protected Drawable doInBackground(Void... params) {
 			try {
-				return Drawable.createFromStream(API.getImage(ItemListActivity.this, thumbnailImageURL), "src");
+				return Drawable.createFromPath(API.getImageFile(ItemListActivity.this, thumbnailImageURL).getAbsolutePath());
 			} catch (Exception e) {
 				return null;
 			}
@@ -145,6 +159,9 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		
 		@Override
 		protected void onPostExecute(Drawable result) {
+			if (isCancelled()) {
+				return;
+			}
 			TextView textView = textViewsByPosition.get(position);
 			if (result != null && textView != null) {
 				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
@@ -195,6 +212,9 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		@Override
 		protected void onPostExecute(Result<Category[]> result) {
 			progressDialog.dismiss();
+			if (isCancelled()) {
+				return;
+			}
 			if (result.success) {
 				Log.i(TAG, "Successfully loaded categories");
 				for (Category category: result.resource) {
