@@ -31,6 +31,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,9 +93,30 @@ public class ItemListActivity extends RedTitleBarListActivity {
 						textViewsByPosition.put(position, textView);
 						Item item = getItem(position);
 						textView.setLines(2);
-						textView.setText(Html.fromHtml(String.format("%s<br><small>¥%d</small>", item.getName(), item.getPrice())));
 						textView.setCompoundDrawablePadding(textView.getPaddingLeft());
 						textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
+						// If necessary, truncate the item name to fit on one line with an ellipsis
+						StringBuilder itemName = new StringBuilder(Html.fromHtml(item.getName()).toString());
+						float textWidth = textView.getPaint().measureText(itemName.toString());
+						DisplayMetrics metrics = new DisplayMetrics();
+						getWindowManager().getDefaultDisplay().getMetrics(metrics);
+						// Sadly this is the only way that I know of to calculate the area available for the item name
+						// We need to subtract 2 * padding because the padding is applied to both the compound drawable and the text
+						int width = metrics.widthPixels - 2 * textView.getPaddingLeft() - textView.getPaddingRight() - blank.getBounds().width();
+						if (textWidth >= width) {
+							String ellipsis = "...";
+							itemName.append(ellipsis);
+							while (textWidth >= width) {
+								try {
+									itemName.deleteCharAt(itemName.length() - ellipsis.length() - 1);
+								} catch (Exception e) {
+									break;
+								}
+								textWidth = textView.getPaint().measureText(itemName.toString());
+							}
+						}
+						String text = Html.fromHtml(String.format("%s<br><small>¥%d</small>", itemName, item.getPrice())).toString();
+						textView.setText(text);
 						LoadThumbnailImageTask task = new LoadThumbnailImageTask(item.getThumbnail_image_url(), position);
 						tasks.add(task);
 						task.execute();
