@@ -2,7 +2,6 @@ package com.maishoku.android.activities;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,6 +32,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -50,7 +50,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 	private static final int ADJUSTED_HEIGHT = (int) (HEIGHT * 1.5);
 	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean itemsLoaded = new AtomicBoolean(false);
-	private final HashMap<Integer, TextView> textViewsByPosition = new HashMap<Integer, TextView>();
+	private final SparseArray<TextView> textViewsByPosition = new SparseArray<TextView>();
 	private final HashSet<AsyncTask<?, ?, ?>> tasks = new HashSet<AsyncTask<?, ?, ?>>();
 	private ArrayAdapter<Item> adapter;
 	private Drawable blank;
@@ -81,13 +81,15 @@ public class ItemListActivity extends RedTitleBarListActivity {
 				if (view instanceof TextView) {
 					TextView textView = (TextView) view;
 					LinkedList<Integer> positions = new LinkedList<Integer>();
-					for (HashMap.Entry<Integer, TextView> entry: textViewsByPosition.entrySet()) {
-						if (entry.getValue() == textView && entry.getKey() != position) {
-							positions.add(entry.getKey());
+					for (int i = 0, n = textViewsByPosition.size(); i < n; i++) {
+						int p = textViewsByPosition.keyAt(i);
+						TextView t = textViewsByPosition.valueAt(i);
+						if (t == textView && p != position) {
+							positions.add(p);
 						}
 					}
-					for (Integer i: positions) {
-						textViewsByPosition.put(i, null);
+					for (Integer p: positions) {
+						textViewsByPosition.put(p, null);
 					}
 					if (enabled) {
 						textViewsByPosition.put(position, textView);
