@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class RestaurantActivity extends RedTitleBarActivity {
@@ -36,17 +37,18 @@ public class RestaurantActivity extends RedTitleBarActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.restaurant);
 		Restaurant restaurant = API.restaurant;
+		String description = restaurant.getDescription();
 		setCustomTitle(restaurant.getName());
 		API.addCartButton(this);
 		LinearLayout linearLayout = (LinearLayout) findViewById(R.id.restaurantLinearLayout);
-		LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) linearLayout.getLayoutParams();
+		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
 		Display display = getWindowManager().getDefaultDisplay();
 		int width = (display.getWidth() - layoutParams.leftMargin - layoutParams.rightMargin) / 2;
 		task = new LoadMainlogoImageTask(restaurant.getMainlogo_image_url(), width, layoutParams.height);
 		task.execute();
 		TextView textView;
 		textView = (TextView) findViewById(R.id.restaurantTextView);
-		textView.setText(Html.fromHtml(restaurant.getDescription()));
+		textView.setText(description == null ? "" : Html.fromHtml(description));
 		textView = (TextView) findViewById(R.id.restaurantAddressTextView1);
 		textView.setText(restaurant.getAddress());
 		textView = (TextView) findViewById(R.id.restaurantPhoneNumberTextView1);
