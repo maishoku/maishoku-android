@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,9 +72,30 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 					Restaurant restaurant = getItem(position);
 					TextView textView = (TextView) view;
 					textView.setLines(2);
-					textView.setText(Html.fromHtml(String.format("%s<br><small>%s</small>", restaurant.getName(), restaurant.getCommaSeparatedCuisines())));
 					textView.setCompoundDrawablePadding(textView.getPaddingLeft());
 					textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
+					// If necessary, truncate the item name to fit on one line with an ellipsis
+					StringBuilder restaurantName = new StringBuilder(Html.fromHtml(restaurant.getName()).toString());
+					float textWidth = textView.getPaint().measureText(restaurantName.toString());
+					DisplayMetrics metrics = new DisplayMetrics();
+					getWindowManager().getDefaultDisplay().getMetrics(metrics);
+					// Sadly this is the only way that I know of to calculate the area available for the item name
+					// We need to subtract 2 * padding because the padding is applied to both the compound drawable and the text
+					int width = metrics.widthPixels - 2 * textView.getPaddingLeft() - textView.getPaddingRight() - blank.getBounds().width();
+					if (textWidth >= width) {
+						String ellipsis = "...";
+						restaurantName.append(ellipsis);
+						while (textWidth >= width) {
+							try {
+								restaurantName.deleteCharAt(restaurantName.length() - ellipsis.length() - 1);
+							} catch (Exception e) {
+								break;
+							}
+							textWidth = textView.getPaint().measureText(restaurantName.toString());
+						}
+					}
+					String text = Html.fromHtml(String.format("%s<br><small>%s</small>", restaurantName, restaurant.getCommaSeparatedCuisines())).toString();
+					textView.setText(text);
 					LoadDirlogoImageTask task = new LoadDirlogoImageTask(restaurant.getDirlogo_image_url(), textView);
 					tasks.add(task);
 					task.execute();
