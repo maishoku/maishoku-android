@@ -1,5 +1,6 @@
 package com.maishoku.android.activities;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
@@ -20,12 +21,16 @@ import com.maishoku.android.IO;
 import com.maishoku.android.RedTitleBarListActivity;
 import com.maishoku.android.R;
 import com.maishoku.android.Result;
+import com.maishoku.android.ScalingUtilities;
+import com.maishoku.android.ScalingUtilities.ScalingLogic;
 import com.maishoku.android.models.Category;
 import com.maishoku.android.models.Item;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -103,8 +108,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 						DisplayMetrics metrics = new DisplayMetrics();
 						getWindowManager().getDefaultDisplay().getMetrics(metrics);
 						// Sadly this is the only way that I know of to calculate the area available for the item name
-						// We need to subtract 2 * padding because the padding is applied to both the compound drawable and the text
-						int width = metrics.widthPixels - 2 * textView.getPaddingLeft() - textView.getPaddingRight() - blank.getBounds().width();
+						int width = metrics.widthPixels - textView.getCompoundDrawablePadding() - textView.getPaddingLeft() - textView.getPaddingRight() - blank.getBounds().width();
 						if (textWidth >= width) {
 							String ellipsis = "...";
 							itemName.append(ellipsis);
@@ -162,7 +166,7 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		}
 	}
 	
-	private class LoadThumbnailImageTask extends AsyncTask<Void, Void, Drawable> {
+	private class LoadThumbnailImageTask extends AsyncTask<Void, Void, Bitmap> {
 	
 		private final String thumbnailImageURL;
 		private final int position;
@@ -173,23 +177,32 @@ public class ItemListActivity extends RedTitleBarListActivity {
 		}
 		
 		@Override
-		protected Drawable doInBackground(Void... params) {
+		protected Bitmap doInBackground(Void... params) {
 			try {
-				return Drawable.createFromPath(API.getImageFile(ItemListActivity.this, thumbnailImageURL).getAbsolutePath());
+				File file = API.getImageFile(ItemListActivity.this, thumbnailImageURL);
+				Bitmap unscaledBitmap = ScalingUtilities.decodeFile(file, ADJUSTED_WIDTH, ADJUSTED_HEIGHT, ScalingLogic.FIT);
+				if (unscaledBitmap == null) {
+					return null;
+				} else {
+					Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, ADJUSTED_WIDTH, ADJUSTED_HEIGHT, ScalingLogic.FIT);
+					unscaledBitmap.recycle();
+					return scaledBitmap;
+				}
 			} catch (Exception e) {
 				return null;
 			}
 		}
 		
 		@Override
-		protected void onPostExecute(Drawable result) {
+		protected void onPostExecute(Bitmap result) {
 			if (isCancelled()) {
 				return;
 			}
 			TextView textView = textViewsByPosition.get(position);
 			if (result != null && textView != null) {
-				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
-				textView.setCompoundDrawables(result, null, null, null);
+				Drawable drawable = new BitmapDrawable(result);
+				drawable.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
+				textView.setCompoundDrawables(drawable, null, null, null);
 			}
 		}
 	

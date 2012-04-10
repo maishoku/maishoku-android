@@ -1,5 +1,6 @@
 package com.maishoku.android.activities;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
@@ -16,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +42,8 @@ import com.maishoku.android.IO;
 import com.maishoku.android.R;
 import com.maishoku.android.RedTitleBarListActivity;
 import com.maishoku.android.Result;
+import com.maishoku.android.ScalingUtilities;
+import com.maishoku.android.ScalingUtilities.ScalingLogic;
 import com.maishoku.android.models.Address;
 import com.maishoku.android.models.Cart;
 import com.maishoku.android.models.Restaurant;
@@ -80,8 +85,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 					DisplayMetrics metrics = new DisplayMetrics();
 					getWindowManager().getDefaultDisplay().getMetrics(metrics);
 					// Sadly this is the only way that I know of to calculate the area available for the item name
-					// We need to subtract 2 * padding because the padding is applied to both the compound drawable and the text
-					int width = metrics.widthPixels - 2 * textView.getPaddingLeft() - textView.getPaddingRight() - blank.getBounds().width();
+					int width = metrics.widthPixels - textView.getCompoundDrawablePadding() - textView.getPaddingLeft() - textView.getPaddingRight() - blank.getBounds().width();
 					if (textWidth >= width) {
 						String ellipsis = "...";
 						restaurantName.append(ellipsis);
@@ -156,7 +160,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		}
 	}
 	
-	private class LoadDirlogoImageTask extends AsyncTask<Void, Void, Drawable> {
+	private class LoadDirlogoImageTask extends AsyncTask<Void, Void, Bitmap> {
 		
 		private final String dirlogoImageURL;
 		private final TextView textView;
@@ -167,22 +171,31 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 		}
 		
 		@Override
-		protected Drawable doInBackground(Void... params) {
+		protected Bitmap doInBackground(Void... params) {
 			try {
-				return Drawable.createFromPath(API.getImageFile(RestaurantListActivity.this, dirlogoImageURL).getAbsolutePath());
+				File file = API.getImageFile(RestaurantListActivity.this, dirlogoImageURL);
+				Bitmap unscaledBitmap = ScalingUtilities.decodeFile(file, ADJUSTED_WIDTH, ADJUSTED_HEIGHT, ScalingLogic.FIT);
+				if (unscaledBitmap == null) {
+					return null;
+				} else {
+					Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, ADJUSTED_WIDTH, ADJUSTED_HEIGHT, ScalingLogic.FIT);
+					unscaledBitmap.recycle();
+					return scaledBitmap;
+				}
 			} catch (Exception e) {
 				return null;
 			}
 		}
 		
 		@Override
-		protected void onPostExecute(Drawable result) {
+		protected void onPostExecute(Bitmap result) {
 			if (isCancelled()) {
 				return;
 			}
 			if (result != null) {
-				result.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
-				textView.setCompoundDrawables(result, null, null, null);
+				Drawable drawable = new BitmapDrawable(result);
+				drawable.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
+				textView.setCompoundDrawables(drawable, null, null, null);
 			}
 		}
 	
