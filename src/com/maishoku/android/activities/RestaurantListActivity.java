@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +26,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -57,6 +59,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	private static final int ADJUSTED_HEIGHT = (int) (HEIGHT * 1.5);
 	private static final int ADJUSTED_WIDTH = (int) (WIDTH * 1.5);
 	private final AtomicBoolean restaurantsLoaded = new AtomicBoolean(false);
+	private final SparseArray<TextView> textViewsByPosition = new SparseArray<TextView>();
 	private final HashSet<AsyncTask<?, ?, ?>> tasks = new HashSet<AsyncTask<?, ?, ?>>();
 	private ArrayAdapter<Restaurant> adapter;
 	private Drawable blank;
@@ -76,6 +79,18 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 				if (view instanceof TextView) {
 					Restaurant restaurant = getItem(position);
 					TextView textView = (TextView) view;
+					LinkedList<Integer> positions = new LinkedList<Integer>();
+					for (int i = 0, n = textViewsByPosition.size(); i < n; i++) {
+						int p = textViewsByPosition.keyAt(i);
+						TextView t = textViewsByPosition.valueAt(i);
+						if (t == textView && p != position) {
+							positions.add(p);
+						}
+					}
+					for (Integer p: positions) {
+						textViewsByPosition.put(p, null);
+					}
+					textViewsByPosition.put(position, textView);
 					textView.setLines(2);
 					textView.setCompoundDrawablePadding(textView.getPaddingLeft());
 					textView.setCompoundDrawablesWithIntrinsicBounds(blank, null, null, null);
@@ -100,7 +115,7 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 					}
 					String text = Html.fromHtml(String.format("%s<br><small>%s</small>", restaurantName, restaurant.getCommaSeparatedCuisines())).toString();
 					textView.setText(text);
-					LoadDirlogoImageTask task = new LoadDirlogoImageTask(restaurant.getDirlogo_image_url(), textView);
+					LoadDirlogoImageTask task = new LoadDirlogoImageTask(restaurant.getDirlogo_image_url(), position);
 					tasks.add(task);
 					task.execute();
 				}
@@ -163,11 +178,11 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 	private class LoadDirlogoImageTask extends AsyncTask<Void, Void, Bitmap> {
 		
 		private final String dirlogoImageURL;
-		private final TextView textView;
+		private final int position;
 		
-		public LoadDirlogoImageTask(String dirlogoImageURL, TextView textView) {
+		public LoadDirlogoImageTask(String dirlogoImageURL, int position) {
 			this.dirlogoImageURL = dirlogoImageURL;
-			this.textView = textView;
+			this.position = position;
 		}
 		
 		@Override
@@ -192,7 +207,8 @@ public class RestaurantListActivity extends RedTitleBarListActivity {
 			if (isCancelled()) {
 				return;
 			}
-			if (result != null) {
+			TextView textView = textViewsByPosition.get(position);
+			if (result != null && textView != null) {
 				Drawable drawable = new BitmapDrawable(result);
 				drawable.setBounds(0, 0, ADJUSTED_WIDTH, ADJUSTED_HEIGHT);
 				textView.setCompoundDrawables(drawable, null, null, null);
