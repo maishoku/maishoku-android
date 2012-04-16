@@ -34,6 +34,7 @@ import com.maishoku.android.models.Position;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -64,6 +65,7 @@ public class ItemActivity extends RedTitleBarActivity {
 	private final AtomicBoolean itemLoaded = new AtomicBoolean(false);
 	private ArrayList<HashMap<String, CharSequence>> list = new ArrayList<HashMap<String, CharSequence>>();
 	private ArrayList<OptionSet> optionSets = null;
+	private Drawable white;
 	private HashSet<AsyncTask<?, ?, ?>> tasks = new HashSet<AsyncTask<?, ?, ?>>();
 	private Item item = null;
 	private Position position = null;
@@ -79,8 +81,9 @@ public class ItemActivity extends RedTitleBarActivity {
 		final Button addToCartButton = (Button) findViewById(R.id.itemAddToCartButton);
 		final Button addToppingsButton = (Button) findViewById(R.id.itemAddToppingsButton);
 		final ListView optionsListView = (ListView) findViewById(R.id.itemListView);
+		white = getResources().getDrawable(R.drawable.white120x120);
 		item = API.item;
-		setCustomTitle(item.getCategory().getName());
+		setCustomTitle(Html.fromHtml(item.getCategory().getName()));
 		API.addCartButton(this);
 		addToCartButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -254,10 +257,10 @@ public class ItemActivity extends RedTitleBarActivity {
 				LoadDefaultImageTask task = new LoadDefaultImageTask(item.getDefault_image_url(), width, layoutParams.height);
 				tasks.add(task);
 				task.execute();
-				setTitle(item.getCategory().getName());
+				setTitle(Html.fromHtml(item.getCategory().getName()));
 				TextView textView = (TextView) findViewById(R.id.itemTextView);
-				CharSequence description = item.getDescription() == null ? "" : Html.fromHtml(item.getDescription());
-				textView.setText(String.format("%s\n¥%d\n%s", item.getName(), item.getPrice(), description));
+				CharSequence description = item.getDescription() == null ? "" : item.getDescription();
+				textView.setText(Html.fromHtml(String.format("%s<br>¥%d<br>%s", item.getName(), item.getPrice(), description)));
 				List<Option> positionOptions = position.getOptions();
 				optionSets = new ArrayList<OptionSet>();
 				for (OptionSet optionSet: item.getOption_sets()) {
@@ -323,8 +326,10 @@ public class ItemActivity extends RedTitleBarActivity {
 			if (isCancelled()) {
 				return;
 			}
-			if (result != null) {
-				ImageView imageView = (ImageView) findViewById(R.id.itemImageView);
+			ImageView imageView = (ImageView) findViewById(R.id.itemImageView);
+			if (result == null) {
+				imageView.setImageDrawable(white);
+			} else {
 				imageView.setImageBitmap(result);
 			}
 		}
