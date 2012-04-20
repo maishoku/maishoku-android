@@ -89,5 +89,6 @@
     <string name="forgot_password">비밀번호 찾기</string>
     <string name="closed">문을 닫음</string>
     <string name="todays_hours">오늘의 영업 시간</string>
+    <string name="building_name">건물 이름</string>
 
 </resources>

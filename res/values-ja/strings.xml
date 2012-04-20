@@ -89,5 +89,6 @@
     <string name="forgot_password">パスワードをお忘れの場合</string>
     <string name="closed">休みの日</string>
     <string name="todays_hours">今日の営業時間</string>
+    <string name="building_name">建物名</string>
 
 </resources>

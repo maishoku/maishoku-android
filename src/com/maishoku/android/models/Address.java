@@ -16,6 +16,7 @@ public class Address implements Serializable {
 	private String first_date;
 	private String last_date;
 	private String address;
+	private String building_name;
 	
 	public Integer getId() {
 		return id;
@@ -71,6 +72,14 @@ public class Address implements Serializable {
 	
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getBuilding_name() {
+		return building_name;
+	}
+	
+	public void setBuilding_name(String building_name) {
+		this.building_name = building_name;
 	}
 	
 	@Override

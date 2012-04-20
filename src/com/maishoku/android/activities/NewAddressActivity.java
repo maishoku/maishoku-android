@@ -41,9 +41,10 @@ public class NewAddressActivity extends RedTitleBarActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.new_address);
 		setCustomTitle(R.string.add_new_address);
-		final EditText newAddressEditText = (EditText) findViewById(R.id.newAddressEditText);
+		final EditText addressEditText = (EditText) findViewById(R.id.newAddressAddressEditText);
+		final EditText buildingNameEditText = (EditText) findViewById(R.id.newAddressBuildingNameEditText);
 		final Button submitButton = (Button) findViewById(R.id.newAddressSubmitButton);
-		newAddressEditText.addTextChangedListener(new TextWatcher() {
+		TextWatcher textWatcher = new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
@@ -52,17 +53,21 @@ public class NewAddressActivity extends RedTitleBarActivity {
 			}
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				submitButton.setEnabled(newAddressEditText.getText().length() > 0);
+				submitButton.setEnabled(addressEditText.getText().length() > 0 && buildingNameEditText.getText().length() > 0);
 			}
-		});
+		};
+		addressEditText.requestFocus();
+		addressEditText.addTextChangedListener(textWatcher);
+		buildingNameEditText.addTextChangedListener(textWatcher);
 		submitButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				progressDialog = new ProgressDialog(NewAddressActivity.this);
 				progressDialog.setTitle(R.string.loading);
 				progressDialog.show();
-				String address = newAddressEditText.getText().toString();
-				new NewAddressTask(address).execute();
+				String address = addressEditText.getText().toString();
+				String buildingName = buildingNameEditText.getText().toString();
+				new NewAddressTask(address, buildingName).execute();
 			}
 		});
 	}
@@ -72,10 +77,12 @@ public class NewAddressActivity extends RedTitleBarActivity {
 		protected final String TAG = NewAddressTask.class.getSimpleName();
 		
 		private final String address;
+		private final String buildingName;
 		private final AtomicReference<String> message;
 		
-		public NewAddressTask(String address) {
+		public NewAddressTask(String address, String buildingName) {
 			this.address = address;
+			this.buildingName = buildingName;
 			this.message = new AtomicReference<String>();
 		}
 		
@@ -87,6 +94,7 @@ public class NewAddressActivity extends RedTitleBarActivity {
 				httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 				Address a = new Address();
 				a.setAddress(address);
+				a.setBuilding_name(buildingName);
 				HttpEntity<Address> httpEntity = API.getHttpEntity(NewAddressActivity.this, a, httpHeaders);
 				RestTemplate restTemplate = new RestTemplate();
 				restTemplate.setErrorHandler(new ResponseErrorHandler() {
